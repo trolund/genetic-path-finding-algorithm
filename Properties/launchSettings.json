@@ -3,10 +3,10 @@
     "BlazorCanvasTest2": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:51047;http://localhost:51048",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:51047;http://localhost:51048"
+      }
     }
   }
 }

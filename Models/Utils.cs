@@ -17,6 +17,11 @@ namespace SmartMonkey.Objects
             {
                 return random.NextDouble();
             }
+
+            public static double GetRandomDouble(double max)
+            {
+                return random.NextDouble() * max;
+            }
 	}
 }
 

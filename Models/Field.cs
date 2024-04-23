@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlazorCanvasTest2.Models
 {
@@ -28,7 +26,7 @@ namespace BlazorCanvasTest2.Models
             return v;
         }
 
-        public void AddRandomBalls(int count = 10)
+        public void AddRandomBalls(float x, float y, int count = 10)
         {
             double minSpeed = .5;
             double maxSpeed = 5;
@@ -39,8 +37,8 @@ namespace BlazorCanvasTest2.Models
             {
                 Balls.Add(
                     new Ball(
-                        x: Width * rand.NextDouble(),
-                        y: Height * rand.NextDouble(),
+                        x: x,
+                        y: y,
                         xVel: RandomVelocity(rand, minSpeed, maxSpeed),
                         yVel: RandomVelocity(rand, minSpeed, maxSpeed),
                         radius: radius,
