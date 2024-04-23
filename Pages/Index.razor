@@ -1,0 +1,112 @@
+﻿@page "/"
+
+@using Blazor.Extensions
+@using Blazor.Extensions.Canvas.Canvas2D
+@inject IJSRuntime JsRuntime;
+
+<div id="canvasHolder" style="position: fixed; background-color: magenta; width: 600px; height: 400px">
+    <BECanvas Width="600" Height="400" @ref="_canvasReference"></BECanvas>
+</div>
+
+@code{
+    private Models.Field BallField = new Models.Field();
+    private List<Models.Wall> walls = new List<Models.Wall>();
+
+    private Canvas2DContext ctx;
+    protected BECanvasComponent _canvasReference;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.ctx = await _canvasReference.CreateCanvas2DAsync();
+
+
+        this.walls.Add(new Models.Wall(100, 100, 200, 20, "#a83299"));
+
+
+
+        await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
+        await base.OnInitializedAsync();
+    }
+
+    private DateTime LastRender;
+
+    [JSInvokable]
+    public void ResizeInBlazor(double width, double height) => BallField.Resize(width, height);
+
+    [JSInvokable]
+    public async ValueTask RenderInBlazor(float timeStamp)
+    {
+        if (BallField.Balls.Count == 0)
+            BallField.AddRandomBalls(50);
+
+        double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
+        LastRender = DateTime.Now;
+
+        BallField.StepForward();
+
+        await this.ctx.BeginBatchAsync();
+
+        await this.ctx.ClearRectAsync(0, 0, BallField.Width, BallField.Height);
+        await this.ctx.SetFillStyleAsync("#003366");
+        await this.ctx.FillRectAsync(0, 0, BallField.Width, BallField.Height);
+
+        await this.ctx.SetFontAsync("26px Segoe UI");
+        await this.ctx.SetFillStyleAsync("#FFFFFF");
+        await this.ctx.FillTextAsync("Blazor WebAssembly + HTML Canvas", 10, 30);
+
+        await this.ctx.SetFontAsync("16px consolas");
+        await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
+
+        await this.ctx.SetStrokeStyleAsync("#FFFFFF");
+
+        // kill balls if it hít any walls
+        foreach (var ball in BallField.Balls.Where(b => b.Alive)) 
+        {
+            foreach (var wall in this.walls)
+            {
+                if(IsPointInsideRectangle(ball.X, ball.Y, wall.X, wall.Y, wall.X + wall.Width, wall.Y + wall.Height))
+                {
+                    ball.Kill();
+                }
+            }
+        }
+
+        foreach (var ball in BallField.Balls)
+        {
+            if (ball.Alive) // only show ball if it is alive
+            {
+                await this.ctx.BeginPathAsync();
+                await this.ctx.ArcAsync(ball.X, ball.Y, ball.R, 0, 2 * Math.PI, false);
+                await this.ctx.SetFillStyleAsync(ball.Color);
+                await this.ctx.FillAsync();
+                await this.ctx.StrokeAsync();
+            }
+        }
+
+        foreach (var wall in this.walls)
+        {
+            await this.ctx.BeginPathAsync();
+            await this.ctx.SetFillStyleAsync(wall.Color);
+            await this.ctx.FillRectAsync(wall.X, wall.Y, wall.Width, wall.Height);
+            await this.ctx.FillAsync();
+            await this.ctx.StrokeAsync();
+        }
+
+        await this.ctx.EndBatchAsync();
+    }
+
+
+    private bool IsPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2)
+    {
+        // Check if x lies inside the x-coordinate range of the rectangle
+        bool xInRange = x > x1 && x < x2;
+
+        // Check if y lies inside the y-coordinate range of the rectangle
+        bool yInRange = y > y1 && y < y2;
+
+        // If both conditions are satisfied, the point is inside the rectangle
+        var ShouldDie = xInRange && yInRange;
+
+        return ShouldDie;
+    }
+}
