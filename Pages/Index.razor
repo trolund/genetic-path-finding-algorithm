@@ -11,6 +11,8 @@
 @code{
     private Models.Field BallField = new Models.Field();
     private List<Models.Wall> walls = new List<Models.Wall>();
+    private Models.Point goal = new Models.Point(250, 50);
+    private Models.Point start = new Models.Point(250, 800);
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -21,6 +23,7 @@
 
 
         this.walls.Add(new Models.Wall(100, 100, 200, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(200, 300, 200, 20, "#a83299"));
 
 
 
@@ -92,9 +95,24 @@
             await this.ctx.StrokeAsync();
         }
 
+        // draw start and goal
+        // goal 
+        await this.ctx.BeginPathAsync();
+        await this.ctx.SetFillStyleAsync("#a83210");
+        await this.ctx.ArcAsync(goal.X, goal.Y, 20, 0, 2 * Math.PI, false);
+        await this.ctx.FillAsync();
+        await this.ctx.StrokeAsync();
+        // start 
+        await this.ctx.BeginPathAsync();
+        await this.ctx.SetFillStyleAsync("#E23810");
+        await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
+        await this.ctx.FillAsync();
+        await this.ctx.StrokeAsync();
+
+
+
         await this.ctx.EndBatchAsync();
     }
-
 
     private bool IsPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2)
     {
