@@ -39,7 +39,10 @@
     public async ValueTask RenderInBlazor(float timeStamp)
     {
         if (BallField.Balls.Count == 0)
-            BallField.AddRandomBalls(start.X, start.Y, 10);
+        {
+            BallField.AddToStart(start, 100);
+            Console.WriteLine("created balls at start");
+        }
 
         double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
         LastRender = DateTime.Now;

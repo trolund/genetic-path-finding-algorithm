@@ -7,8 +7,8 @@ namespace BlazorCanvasTest2.Models
 {
     public class DNA {
 
-        private List<Vector2> Genes = new List<Vector2>();
-        private double maxForce = 0.1;
+        private List<Vector2> Genes;
+        private double maxForce = 20.5;
         public static readonly Random random = new Random();
 
         public DNA(int lifeSpan) {
@@ -26,9 +26,10 @@ namespace BlazorCanvasTest2.Models
         }
 
         private void CreateGenomes(int lifeSpan) {
+            Genes = new List<Vector2>();
             for (var i = 0; i < lifeSpan; i++) {
-                var step = new Vector2((float)Utils.GetRandomDouble(), (float)Utils.GetRandomDouble());
-                Vector2.Multiply(step, (float)Utils.GetRandomDouble(maxForce));
+                var step = new Vector2((float)(Utils.GetRandomDouble() - 0.5), (float)(Utils.GetRandomDouble() - 1.5));
+                Genes.Add(Vector2.Multiply(step, (float)Utils.GetRandomDouble(maxForce)));
             }
         }
 

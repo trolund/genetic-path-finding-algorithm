@@ -20,7 +20,7 @@ namespace BlazorCanvasTest2.Models
         public Ball(float x, float y, double xVel, double yVel, double radius, string color)
         {
             this.Alive = true;
-            dna = new DNA(100);
+            dna = new DNA(200);
             pos = new Vector2(x, y);
             (XVel, YVel, R, Color) = (xVel, yVel, radius, color);
         }
@@ -35,9 +35,12 @@ namespace BlazorCanvasTest2.Models
 
         private void ApplyForce()
         {
-            if(geneIndex < dna.GetLifeSpan())
+            Console.WriteLine("applyForce 2");
+            if (geneIndex < 100)
             {
+                Console.WriteLine("applyForce, num of steps:", dna.GetLifeSpan());
                 var step = dna.GetStep(geneIndex);
+                Console.WriteLine("step:" + step);
                 pos = pos + step;
                 geneIndex++;
             }
