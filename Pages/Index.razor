@@ -23,8 +23,8 @@
     {
         this.ctx = await _canvasReference.CreateCanvas2DAsync();
 
-        this.walls.Add(new Models.Wall(100, 100, 200, 20, "#a83299"));
-        this.walls.Add(new Models.Wall(200, 300, 200, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(100, 250, 200, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(200, 450, 200, 20, "#a83299"));
 
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();

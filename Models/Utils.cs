@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Runtime.InteropServices;
 
 namespace SmartMonkey.Objects
@@ -17,6 +18,12 @@ namespace SmartMonkey.Objects
             {
                 return random.NextDouble();
             }
+
+            // random between min and max 
+            public static float GetRandomFloat(double min, double max)
+            {
+                return (float) (random.NextDouble() * (max - min) + min);
+        }
 
             public static double GetRandomDouble(double max)
             {

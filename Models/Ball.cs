@@ -20,7 +20,7 @@ namespace BlazorCanvasTest2.Models
         public Ball(float x, float y, double xVel, double yVel, double radius, string color)
         {
             this.Alive = true;
-            dna = new DNA(200);
+            dna = new DNA(500);
             pos = new Vector2(x, y);
             (XVel, YVel, R, Color) = (xVel, yVel, radius, color);
         }
