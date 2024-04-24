@@ -69,7 +69,7 @@
         {
             foreach (var wall in this.walls)
             {
-                if(IsPointInsideRectangle(ball.pos.X, ball.pos.Y, wall.X, wall.Y, wall.X + wall.Width, wall.Y + wall.Height))
+                if(IsPointInsideRectangle(ball.Pos.X, ball.Pos.Y, wall.X, wall.Y, wall.X + wall.Width, wall.Y + wall.Height))
                 {
                     ball.Kill();
                 }
@@ -81,7 +81,7 @@
             if (ball.Alive) // only show ball if it is alive
             {
                 await this.ctx.BeginPathAsync();
-                await this.ctx.ArcAsync(ball.pos.X, ball.pos.Y, ball.R, 0, 2 * Math.PI, false);
+                await this.ctx.ArcAsync(ball.Pos.X, ball.Pos.Y, ball.R, 0, 2 * Math.PI, false);
                 await this.ctx.SetFillStyleAsync(ball.Color);
                 await this.ctx.FillAsync();
                 await this.ctx.StrokeAsync();

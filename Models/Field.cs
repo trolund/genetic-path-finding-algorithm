@@ -35,36 +35,12 @@ namespace BlazorCanvasTest2.Models
             {
                 Balls.Add(
                     new Ball(
-                        x: start.X,
-                        y: start.Y,
-                        xVel: 0,
-                        yVel: 0,
+                        start: start,
+                        vel: new Vector2(0, 0),
                         radius: 10,
                         color: string.Format("#{0:X6}", rand.Next(0xFFFFFF))
                     )
-                );
-            }
-        }
-
-        public void AddRandomBalls(float x, float y, int count = 10)
-        {
-            double minSpeed = .5;
-            double maxSpeed = 5;
-            double radius = 10;
-            Random rand = new Random();
-
-            for (int i = 0; i < count; i++)
-            {
-                Balls.Add(
-                    new Ball(
-                        x: x,
-                        y: y,
-                        xVel: RandomVelocity(rand, minSpeed, maxSpeed),
-                        yVel: RandomVelocity(rand, minSpeed, maxSpeed),
-                        radius: radius,
-                        color: string.Format("#{0:X6}", rand.Next(0xFFFFFF))
-                    )
-                );
+                ); ;
             }
         }
     }

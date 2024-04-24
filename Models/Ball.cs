@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMonkey.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -8,21 +9,22 @@ namespace BlazorCanvasTest2.Models
 {
     public class Ball
     {
-        public Vector2 pos { get; set; }
-        public double XVel { get; private set; }
-        public double YVel { get; private set; }
+        public Vector2 Pos { get; set; }
+        public Vector2 Vel { get; private set; }
         public double R { get; private set; }
         public string Color { get; private set; }
         public bool Alive { get; private set; }
         public DNA dna { get; private set; }
         private int geneIndex = 0;
+        public double Fitness { get; set; }
 
-        public Ball(float x, float y, double xVel, double yVel, double radius, string color)
+        public Ball(Vector2 start, Vector2 vel, double radius, string color)
         {
             this.Alive = true;
             dna = new DNA(500);
-            pos = new Vector2(x, y);
-            (XVel, YVel, R, Color) = (xVel, yVel, radius, color);
+            Pos = start;
+            Vel = vel;
+            (R, Color) = (radius, color);
         }
 
         public void StepForward(double width, double height)
@@ -36,12 +38,9 @@ namespace BlazorCanvasTest2.Models
         private void ApplyForce()
         {
             Console.WriteLine("applyForce 2");
-            if (geneIndex < 100)
+            if (geneIndex < 500)
             {
-                Console.WriteLine("applyForce, num of steps:", dna.GetLifeSpan());
-                var step = dna.GetStep(geneIndex);
-                Console.WriteLine("step:" + step);
-                pos = pos + step;
+                Pos = Pos + dna.GetStep(geneIndex);
                 geneIndex++;
             }
         }
@@ -50,5 +49,15 @@ namespace BlazorCanvasTest2.Models
         {
             Alive = false;
         }
+
+        public double CalculateFitness(Vector2 target)
+        {
+            
+            float dist = Math.Abs(Vector2.Distance(target, Pos));
+            double fitness = 1.0 / (1.0 + dist);
+            Fitness = fitness;
+            return fitness;
+        }
+
     }
 }
