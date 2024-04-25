@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorCanvasTest2.Models
@@ -14,16 +15,18 @@ namespace BlazorCanvasTest2.Models
         public double R { get; private set; }
         public string Color { get; private set; }
         public bool Alive { get; private set; }
-        public DNA dna { get; private set; }
+        public DNA dna { get; set; }
         private int geneIndex = 0;
         public double Fitness { get; set; }
+        public Vector2 Start { get; set; }
 
-        public Ball(Vector2 start, Vector2 vel, double radius, string color)
+    public Ball(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan)
         {
             this.Alive = true;
-            dna = new DNA(500);
+            dna = new DNA(lifeSpan);
             Pos = start;
             Vel = vel;
+            Start = start;
             (R, Color) = (radius, color);
         }
 
@@ -37,8 +40,7 @@ namespace BlazorCanvasTest2.Models
 
         private void ApplyForce()
         {
-            Console.WriteLine("applyForce 2");
-            if (geneIndex < 500)
+            if (geneIndex < dna.GetLifeSpan())
             {
                 Pos = Pos + dna.GetStep(geneIndex);
                 geneIndex++;

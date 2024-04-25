@@ -28,7 +28,7 @@ namespace BlazorCanvasTest2.Models
             return v;
         }
 
-        public void AddToStart(Vector2 start, int count = 10)
+        public void AddToStart(Vector2 start, int lifespand, int count = 10)
         {
             Random rand = new Random();
             for (int i = 0; i < count; i++)
@@ -38,7 +38,8 @@ namespace BlazorCanvasTest2.Models
                         start: start,
                         vel: new Vector2(0, 0),
                         radius: 10,
-                        color: string.Format("#{0:X6}", rand.Next(0xFFFFFF))
+                        color: string.Format("#{0:X6}", rand.Next(0xFFFFFF)),
+                        lifespand
                     )
                 ); ;
             }
