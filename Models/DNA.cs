@@ -11,7 +11,7 @@ namespace BlazorCanvasTest2.Models
     public class DNA {
 
         private Vector2[] Genes;
-        private double maxForce = 2.5;
+        private double maxForce = 1.5;
         public static readonly Random random = new Random();
         public int LifeSpan;
 
@@ -39,7 +39,7 @@ namespace BlazorCanvasTest2.Models
         }
 
         /// <summary>
-        ///  single point corssover between 
+        ///  single point corssover between parent1 and parent2
         /// </summary>
         /// <param name="parent1"></param>
         /// <param name="parent2"></param>
@@ -52,17 +52,24 @@ namespace BlazorCanvasTest2.Models
             // Point of Crossover
             int crossoverPoint = Utils.random.Next(parent1.dna.GetLifeSpan());
 
-            var genes1 = parent1.dna.Genes;
-            var genes2 = parent2.dna.Genes;
-
-            // TODO combiner the two sides 
-            Vector2[] childDna = genes1.Take(crossoverPoint)
-                            .Concat(genes2.Skip(crossoverPoint))
+            Vector2[] childDna = parent1.dna.Genes.Take(crossoverPoint)
+                            .Concat(parent2.dna.Genes.Skip(crossoverPoint))
                             .ToArray();
 
             child.dna.Genes = childDna;
 
             return child;
+        }
+
+        public void Mutate(double mutationRate)
+        {
+            for (int i = 0; i < Genes.Length; i++)
+            {
+                if (Utils.GetRandomDouble() < mutationRate) 
+                {
+                    Genes[i] = new Vector2((float)(Utils.GetRandomDouble()), (float)(Utils.GetRandomDouble()));
+                }
+            }
         }
 
     }
