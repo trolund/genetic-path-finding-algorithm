@@ -1,61 +1,70 @@
-﻿namespace SmartMonkey.Objects
+﻿using SmartMonkey.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace BlazorCanvasTest2.Models
 {
     public class Individual
     {
-        public string Genes { get; set; }
+        public Vector2 Pos { get; set; }
+        public Vector2 Vel { get; private set; }
+        public double R { get; private set; }
+        public string Color { get; private set; }
+        public bool Alive { get; private set; }
+        public DNA dna { get; set; }
+        private int geneIndex = 0;
         public double Fitness { get; set; }
+        public Vector2 Start { get; set; }
 
-        public Individual(int length)
+        public Individual(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan)
         {
-            Genes = string.Empty;
-            Fitness = 0;
-            for (int i = 0; i < length; i++)
+            this.Alive = true;
+            dna = new DNA(lifeSpan);
+            Pos = start;
+            Vel = vel;
+            Start = start;
+            (R, Color) = (radius, color);
+        }
+
+        public void StepForward(double width, double height)
+        {
+            if (Alive) // only move if it is alive
             {
-                Genes += Utils.GetRandomCharacter();
+                ApplyForce();
             }
         }
 
-        public void CalculateFitness(string target)
+        private void ApplyForce()
         {
-            int score = 0;
-            for (int i = 0; i < target.Length; i++)
+            if (geneIndex < dna.GetLifeSpan())
             {
-                if (Genes[i] == target[i])
-                {
-                    score++;
-                }
+                Pos = Pos + dna.GetStep(geneIndex);
+                geneIndex++;
             }
-            Fitness = (double)score / target.Length;
         }
 
-        public Individual Crossover(Individual partner)
+        public void Kill()
         {
-            Individual child = new Individual(Genes.Length);
-            int midpoint = Utils.random.Next(Genes.Length);
-            for (int i = 0; i < Genes.Length; i++)
-            {
-                if (i > midpoint)
-                {
-                    child.Genes = child.Genes.Substring(0, i) + Genes[i] + child.Genes.Substring(i + 1);
-                }
-                else
-                {
-                    child.Genes = child.Genes.Substring(0, i) + partner.Genes[i] + child.Genes.Substring(i + 1);
-                }
-            }
-            return child;
+            Alive = false;
         }
 
-        public void Mutate(double mutationRate)
+        public double CalculateFitness(Vector2 target)
         {
-            for (int i = 0; i < Genes.Length; i++)
+            float dist = Math.Abs(Vector2.Distance(target, Pos));
+            double fitness = 1.0 / (1.0 + dist);
+
+            if (!Alive)
             {
-                if (Utils.GetRandomDouble() < mutationRate)
-                {
-                    Genes = Genes.Substring(0, i) + Utils.GetRandomCharacter() + Genes.Substring(i + 1);
-                }
+                fitness = fitness - (fitness * 0.2);
             }
+
+            Fitness = fitness;
+            return fitness;
         }
+
     }
 }
-

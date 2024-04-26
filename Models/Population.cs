@@ -1,33 +1,34 @@
-﻿using System;
+﻿using BlazorCanvasTest2.Models;
+using System;
+using System.Numerics;
 namespace SmartMonkey.Objects
 {
     public class Population
     {
         public Individual[] Individuals { get; set; }
         public double BestFitness { get; set; }
-        public string BestIndividual { get; set; }
+        public Individual BestIndividual { get; set; }
         public int BestIndex { get; set; }
 
-        public void Initialize(int populationSize, int targetLength)
+        public void Initialize(Vector2 start, int populationSize, int lifespan)
         {
             Individuals = new Individual[populationSize];
             for (int i = 0; i < populationSize; i++)
             {
-                Individuals[i] = new Individual(targetLength);
+                Individuals[i] = new Individual(start, new Vector2(0,0), 10, Utils.RandomHexColor(), lifespan);
             }
         }
 
-        public void CalculateFitness(string target)
+        public void CalculateFitness(Vector2 target)
         {
             BestFitness = 0;
-            BestIndividual = string.Empty;
             foreach (Individual individual in Individuals)
             {
                 individual.CalculateFitness(target);
                 if (individual.Fitness > BestFitness)
                 {
                     BestFitness = individual.Fitness;
-                    BestIndividual = individual.Genes;
+                    BestIndividual = individual;
                     BestIndex = Array.IndexOf(Individuals, individual);
                 }
             }
@@ -64,33 +65,33 @@ namespace SmartMonkey.Objects
         }
 
         public Individual RankSelection()
-    {
-        // Sort individuals based on their fitness
-        Array.Sort(Individuals, (x, y) => y.Fitness.CompareTo(x.Fitness));
-
-        // Calculate selection probabilities based on rank
-        double totalProbability = (Individuals.Length * (Individuals.Length + 1)) / 2.0;
-        double[] selectionProbabilities = new double[Individuals.Length];
-        for (int i = 0; i < Individuals.Length; i++)
         {
-            selectionProbabilities[i] = (i + 1) / totalProbability;
-        }
+            // Sort individuals based on their fitness
+            Array.Sort(Individuals, (x, y) => y.Fitness.CompareTo(x.Fitness));
 
-        // Select an individual based on the selection probabilities
-        double randomNumber = Utils.GetRandomDouble();
-        double cumulativeProbability = 0;
-        for (int i = 0; i < Individuals.Length; i++)
-        {
-            cumulativeProbability += selectionProbabilities[i];
-            if (randomNumber <= cumulativeProbability)
+            // Calculate selection probabilities based on rank
+            double totalProbability = (Individuals.Length * (Individuals.Length + 1)) / 2.0;
+            double[] selectionProbabilities = new double[Individuals.Length];
+            for (int i = 0; i < Individuals.Length; i++)
             {
-                return Individuals[i];
+                selectionProbabilities[i] = (i + 1) / totalProbability;
             }
-        }
 
-        // If no individual is selected, return the first one (should not happen)
-        return Individuals[0];
-    }
+            // Select an individual based on the selection probabilities
+            double randomNumber = Utils.GetRandomDouble();
+            double cumulativeProbability = 0;
+            for (int i = 0; i < Individuals.Length; i++)
+            {
+                cumulativeProbability += selectionProbabilities[i];
+                if (randomNumber <= cumulativeProbability)
+                {
+                    return Individuals[i];
+                }
+            }
+
+            // If no individual is selected, return the first one (should not happen)
+            return Individuals[0];
+        }
 
         public void GenerateNextGeneration()
         {
@@ -100,37 +101,30 @@ namespace SmartMonkey.Objects
             {
                 Individual parent1 = RankSelection();
                 Individual parent2 = RankSelection();
-                Individual child = parent1.Crossover(parent2);
-                child.Mutate(0.01); // TODO make it mach the controller
+                Individual child = parent1.dna.Crossover(parent1, parent2);
+                child.dna.Mutate(0.01); // TODO make it mach the controller
                 newGeneration[i] = child;
             }
 
             Individuals = newGeneration;
         }
 
-        public string GetFinal(string target)
+        public Individual[] GetPopulation()
         {
-            foreach (Individual individual in Individuals)
-            {
-                if (individual.Genes == target)
-                {
-                    return individual.Genes;
-                }
-            }
-            return "";
+            return Individuals;
         }
 
-        public bool IsFinished(string target)
-        {
-            foreach (Individual individual in Individuals)
-            {
-                if (individual.Genes == target)
+        /*        public bool IsFinished(string target)
                 {
-                    return true;
-                }
-            }
-            return false;
-        }
+                    foreach (Individual_old individual in Individuals)
+                    {
+                        if (individual.Genes == target)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }*/
     }
 }
 

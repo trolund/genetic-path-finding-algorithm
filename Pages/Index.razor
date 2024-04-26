@@ -11,7 +11,7 @@
 </div>
 
 @code{
-    private Models.Field BallField = new Models.Field();
+    private Models.Field field = new Models.Field();
     private List<Models.Wall> walls = new List<Models.Wall>();
     private Vector2 goal = new Vector2(250, 50);
     private Vector2 start = new Vector2(250, 800);
@@ -33,27 +33,30 @@
     private DateTime LastRender;
 
     [JSInvokable]
-    public void ResizeInBlazor(double width, double height) => BallField.Resize(width, height);
+    public void ResizeInBlazor(double width, double height) => field.Resize(width, height);
 
     [JSInvokable]
     public async ValueTask RenderInBlazor(float timeStamp)
     {
-        if (BallField.Balls.Count == 0)
+        if (field.popultation.Individuals == null)
         {
-            BallField.AddToStart(start, 500);
+            field.InitializeField(start, 500, 10);
             Console.WriteLine("created balls at start");
+        }else
+        {
+            Console.WriteLine("number of balls:", field.popultation.Individuals.Length);
         }
 
         double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
         LastRender = DateTime.Now;
 
-        BallField.StepForward();
+        field.StepForward();
 
         await this.ctx.BeginBatchAsync();
 
-        await this.ctx.ClearRectAsync(0, 0, BallField.Width, BallField.Height);
+        await this.ctx.ClearRectAsync(0, 0, field.Width, field.Height);
         await this.ctx.SetFillStyleAsync("#003366");
-        await this.ctx.FillRectAsync(0, 0, BallField.Width, BallField.Height);
+        await this.ctx.FillRectAsync(0, 0, field.Width, field.Height);
 
         await this.ctx.SetFontAsync("26px Segoe UI");
         await this.ctx.SetFillStyleAsync("#FFFFFF");
@@ -65,7 +68,7 @@
         await this.ctx.SetStrokeStyleAsync("#FFFFFF");
 
         // kill balls if it hít any walls
-        foreach (var ball in BallField.Balls.Where(b => b.Alive)) 
+        foreach (var ball in field.popultation.Individuals.Where(b => b.Alive))
         {
             foreach (var wall in this.walls)
             {
@@ -76,13 +79,13 @@
             }
         }
 
-        foreach (var ball in BallField.Balls)
+        foreach (var individual in field.popultation.Individuals)
         {
-            if (ball.Alive) // only show ball if it is alive
+            if (individual.Alive) // only show ball if it is alive
             {
                 await this.ctx.BeginPathAsync();
-                await this.ctx.ArcAsync(ball.Pos.X, ball.Pos.Y, ball.R, 0, 2 * Math.PI, false);
-                await this.ctx.SetFillStyleAsync(ball.Color);
+                await this.ctx.ArcAsync(individual.Pos.X, individual.Pos.Y, individual.R, 0, 2 * Math.PI, false);
+                await this.ctx.SetFillStyleAsync(individual.Color);
                 await this.ctx.FillAsync();
                 await this.ctx.StrokeAsync();
             }

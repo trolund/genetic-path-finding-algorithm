@@ -44,10 +44,10 @@ namespace BlazorCanvasTest2.Models
         /// <param name="parent1"></param>
         /// <param name="parent2"></param>
         /// <returns></returns>
-        public Ball Crossover(Ball parent1, Ball parent2)
+        public Individual Crossover(Individual parent1, Individual parent2)
         {
             // TODO conbine colors of the childs
-            Ball child = new Ball(parent1.Start, new Vector2(0, 0), parent1.R, parent1.Color, parent1.dna.GetLifeSpan());
+            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, parent1.Color, parent1.dna.GetLifeSpan());
 
             // Point of Crossover
             int crossoverPoint = Utils.random.Next(parent1.dna.GetLifeSpan());
