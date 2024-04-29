@@ -6,7 +6,7 @@
 
 @inject IJSRuntime JsRuntime;
 
-<div id="canvasHolder" style="position: fixed; background-color: magenta; width: 100%; height: 100%">
+<div id="canvasHolder" style="position: fixed; background-color: magenta; width: 600px; height: 800px">
     <BECanvas Width="600" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
@@ -23,7 +23,7 @@
     {
         this.ctx = await _canvasReference.CreateCanvas2DAsync();
 
-        this.walls.Add(new Models.Wall(100, 250, 200, 20, "#a83299"));
+        // this.walls.Add(new Models.Wall(100, 250, 200, 20, "#a83299"));
         this.walls.Add(new Models.Wall(200, 450, 200, 20, "#a83299"));
 
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
@@ -41,7 +41,7 @@
     {
         if (population.Individuals == null)
         {
-            population.Initialize(start, 50, 500);
+            population.Initialize(start, 20, 200);
             Console.WriteLine("created balls at start");
         }else
         {
@@ -66,7 +66,7 @@
         await this.ctx.SetFontAsync("16px consolas");
         await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
         await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70);
-        await this.ctx.FillTextAsync($"Best fitness: {population.BestFitness:0}", 10, 90);
+        await this.ctx.FillTextAsync($"Best fitness: {population.BestFitness:0.000}", 10, 90);
 
         await this.ctx.SetStrokeStyleAsync("#FFFFFF");
 

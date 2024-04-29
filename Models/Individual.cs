@@ -63,7 +63,7 @@ namespace BlazorCanvasTest2.Models
                 fitness = fitness - (fitness * 0.2);
             }
 
-            Fitness = fitness;
+            Fitness = fitness * 100;
             return fitness;
         }
 

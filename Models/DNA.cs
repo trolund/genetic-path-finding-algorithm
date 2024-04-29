@@ -11,7 +11,7 @@ namespace BlazorCanvasTest2.Models
     public class DNA {
 
         private Vector2[] Genes;
-        private double maxForce = 2.5;
+        private double maxForce = 6;
         public static readonly Random random = new Random();
         public int LifeSpan;
 
@@ -67,7 +67,7 @@ namespace BlazorCanvasTest2.Models
             {
                 if (Utils.GetRandomDouble() < mutationRate) 
                 {
-                    Genes[i] = new Vector2((float)(Utils.GetRandomDouble()), (float)(Utils.GetRandomDouble()));
+                    Genes[i] = Vector2.Multiply(new Vector2((float)(Utils.GetRandomDouble() - Utils.GetRandomFloat(-3.5, 4.5)), (float)(Utils.GetRandomDouble() - 1.5)), (float)Utils.GetRandomDouble(maxForce));
                 }
             }
         }

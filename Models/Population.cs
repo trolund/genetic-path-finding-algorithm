@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.ExceptionServices;
+using System.Threading;
 namespace BlazorCanvasTest2.Models
 {
     public class Population
@@ -11,7 +12,8 @@ namespace BlazorCanvasTest2.Models
         public double BestFitness { get; set; }
         public Individual BestIndividual { get; set; }
         public int BestIndex { get; set; }
-        public int Generation {  get; set; }
+        public int Generation {  get; set; }   
+        public Individual BestEver { get; set; }
 
         public void Initialize(Vector2 start, int populationSize, int lifespan)
         {
@@ -20,6 +22,9 @@ namespace BlazorCanvasTest2.Models
             {
                 Individuals[i] = new Individual(start, new Vector2(0,0), 10, Utils.RandomHexColor(), lifespan);
             }
+
+            // just fitness 0
+            BestEver = new Individual(start, new Vector2(0, 0), 10, Utils.RandomHexColor(), lifespan);
         }
 
         public void CalculateFitness(Vector2 target)
@@ -33,6 +38,11 @@ namespace BlazorCanvasTest2.Models
                     BestFitness = individual.Fitness;
                     BestIndividual = individual;
                     BestIndex = Array.IndexOf(Individuals, individual);
+                }
+
+                if (individual.Fitness > BestEver.Fitness)
+                {
+                    BestEver = individual;
                 }
             }
         }
@@ -64,6 +74,16 @@ namespace BlazorCanvasTest2.Models
             {
                 newPopulation[i] = TournamentSelection(5); // Adjust tournament size as needed
             }
+
+            newPopulation = newPopulation.OrderBy(x => x.Fitness).ToArray();
+
+            // replace the 10 weekeste agentes with the best 
+            for (int i = newPopulation.Length - 3; i < Individuals.Length; i++)
+            {
+                newPopulation[i] = BestEver;
+            }
+
+
             Individuals = newPopulation;
         }
 
@@ -105,7 +125,7 @@ namespace BlazorCanvasTest2.Models
                 Individual parent1 = RankSelection();
                 Individual parent2 = RankSelection();
                 Individual child = parent1.dna.Crossover(parent1, parent2);
-                child.dna.Mutate(0.01); // TODO make it mach the controller
+                child.dna.Mutate(0.1); // TODO make it mach the controller
                 newGeneration[i] = child;
             }
 
