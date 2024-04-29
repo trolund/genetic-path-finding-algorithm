@@ -7,11 +7,11 @@
 @inject IJSRuntime JsRuntime;
 
 <div id="canvasHolder" style="position: fixed; background-color: magenta; width: 100%; height: 100%">
-    <BECanvas Width="600" Height="400" @ref="_canvasReference"></BECanvas>
+    <BECanvas Width="600" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
 @code{
-    private Models.Field field = new Models.Field();
+    private Models.Population population = new Models.Population();
     private List<Models.Wall> walls = new List<Models.Wall>();
     private Vector2 goal = new Vector2(250, 50);
     private Vector2 start = new Vector2(250, 800);
@@ -33,30 +33,31 @@
     private DateTime LastRender;
 
     [JSInvokable]
-    public void ResizeInBlazor(double width, double height) => field.Resize(width, height);
+    public void ResizeInBlazor(double width, double height) => Console.WriteLine("resize");
+    //field.Resize(width, height);
 
     [JSInvokable]
     public async ValueTask RenderInBlazor(float timeStamp)
     {
-        if (field.popultation.Individuals == null)
+        if (population.Individuals == null)
         {
-            field.InitializeField(start, 500, 10);
+            population.Initialize(start, 500, 10);
             Console.WriteLine("created balls at start");
         }else
         {
-            Console.WriteLine("number of balls:", field.popultation.Individuals.Length);
+            Console.WriteLine("number of balls:", population.Individuals.Length);
         }
 
         double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
         LastRender = DateTime.Now;
 
-        field.StepForward();
+        population.StepForward(goal);
 
         await this.ctx.BeginBatchAsync();
 
-        await this.ctx.ClearRectAsync(0, 0, field.Width, field.Height);
+        await this.ctx.ClearRectAsync(0, 0, 600, 900);
         await this.ctx.SetFillStyleAsync("#003366");
-        await this.ctx.FillRectAsync(0, 0, field.Width, field.Height);
+        await this.ctx.FillRectAsync(0, 0, 600, 900);
 
         await this.ctx.SetFontAsync("26px Segoe UI");
         await this.ctx.SetFillStyleAsync("#FFFFFF");
@@ -64,11 +65,13 @@
 
         await this.ctx.SetFontAsync("16px consolas");
         await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
+        await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70);
+        await this.ctx.FillTextAsync($"Best fitness: {population.BestFitness:0}", 10, 90);
 
         await this.ctx.SetStrokeStyleAsync("#FFFFFF");
 
         // kill balls if it hít any walls
-        foreach (var ball in field.popultation.Individuals.Where(b => b.Alive))
+        foreach (var ball in population.Individuals.Where(b => b.Alive))
         {
             foreach (var wall in this.walls)
             {
@@ -79,7 +82,7 @@
             }
         }
 
-        foreach (var individual in field.popultation.Individuals)
+        foreach (var individual in population.Individuals)
         {
             if (individual.Alive) // only show ball if it is alive
             {

@@ -1,4 +1,6 @@
-﻿namespace SmartMonkey.Objects
+﻿using BlazorCanvasTest2.Models;
+
+namespace SmartMonkey.Objects
 {
     public class Individual_old
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace SmartMonkey.Objects
+namespace BlazorCanvasTest2.Models
 {
 	public class Utils
 	{

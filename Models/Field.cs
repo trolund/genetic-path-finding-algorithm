@@ -18,7 +18,7 @@ namespace BlazorCanvasTest2.Models
         public void StepForward()
         {
             foreach (Individual individual in popultation.GetPopulation())
-                individual.StepForward(Width, Height);
+                individual.StepForward();
         }
 
         /*        private double RandomVelocity(Random rand, double min, double max)

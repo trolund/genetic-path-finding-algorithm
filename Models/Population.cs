@@ -1,7 +1,9 @@
 ﻿using BlazorCanvasTest2.Models;
 using System;
+using System.Linq;
 using System.Numerics;
-namespace SmartMonkey.Objects
+using System.Runtime.ExceptionServices;
+namespace BlazorCanvasTest2.Models
 {
     public class Population
     {
@@ -9,6 +11,7 @@ namespace SmartMonkey.Objects
         public double BestFitness { get; set; }
         public Individual BestIndividual { get; set; }
         public int BestIndex { get; set; }
+        public int Generation {  get; set; }
 
         public void Initialize(Vector2 start, int populationSize, int lifespan)
         {
@@ -112,6 +115,33 @@ namespace SmartMonkey.Objects
         public Individual[] GetPopulation()
         {
             return Individuals;
+        }
+
+        public bool IsGenerationDone()
+        {
+            var first = Individuals.FirstOrDefault();
+            return first.geneIndex == first.dna.LifeSpan;
+        }
+
+
+        public void StepForward(Vector2 target)
+        {
+
+            if (IsGenerationDone())
+            {
+                CalculateFitness(target);
+                Selection();
+                GenerateNextGeneration();
+                Generation++;
+
+                Console.WriteLine($"Generation: {Generation}, Best Fitness: {BestFitness}");
+            }
+            else // make the agents move
+            {
+                foreach (Individual individual in Individuals)
+                    individual.StepForward();
+            }
+
         }
 
         /*        public bool IsFinished(string target)

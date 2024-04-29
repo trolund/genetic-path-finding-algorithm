@@ -16,7 +16,7 @@ namespace BlazorCanvasTest2.Models
         public string Color { get; private set; }
         public bool Alive { get; private set; }
         public DNA dna { get; set; }
-        private int geneIndex = 0;
+        public int geneIndex { get; set; }
         public double Fitness { get; set; }
         public Vector2 Start { get; set; }
 
@@ -30,7 +30,7 @@ namespace BlazorCanvasTest2.Models
             (R, Color) = (radius, color);
         }
 
-        public void StepForward(double width, double height)
+        public void StepForward()
         {
             if (Alive) // only move if it is alive
             {
