@@ -61,7 +61,6 @@
 
         await this.ctx.SetFontAsync("26px Segoe UI");
         await this.ctx.SetFillStyleAsync("#000");
-        //await this.ctx.FillTextAsync("Genetic algorithm used for path finding", 10, 30);
 
         await this.ctx.SetFontAsync("16px consolas");
         await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
@@ -71,36 +70,19 @@
         // await this.ctx.SetStrokeStyleAsync("#FFF");
 
         // kill balls if it hít any walls
-        foreach (var ball in population.Individuals.Where(b => b.Alive))
+        foreach (var agent in population.Individuals.Where(b => b.Alive))
         {
-            foreach (var wall in this.walls)
-            {
-                if(IsPointInsideRectangle(ball.Pos.X, ball.Pos.Y, wall.X, wall.Y, wall.X + wall.Width, wall.Y + wall.Height))
-                {
-                    ball.Kill();
-                }
-            }
+            agent.HitObstacles(walls);
         }
 
         foreach (var individual in population.Individuals)
         {
-            if (individual.Alive) // only show ball if it is alive
-            {
-                await this.ctx.BeginPathAsync();
-                await this.ctx.ArcAsync(individual.Pos.X, individual.Pos.Y, individual.R, 0, 2 * Math.PI, false);
-                await this.ctx.SetFillStyleAsync(individual.Color);
-                await this.ctx.FillAsync();
-                await this.ctx.StrokeAsync();
-            }
+            individual.Display(ctx);
         }
 
         foreach (var wall in this.walls)
         {
-            await this.ctx.BeginPathAsync();
-            await this.ctx.SetFillStyleAsync(wall.Color);
-            await this.ctx.FillRectAsync(wall.X, wall.Y, wall.Width, wall.Height);
-            await this.ctx.FillAsync();
-            await this.ctx.StrokeAsync();
+           wall.Display(ctx);
         }
 
         // draw start and goal
@@ -118,19 +100,5 @@
         await this.ctx.StrokeAsync();
 
         await this.ctx.EndBatchAsync();
-    }
-
-    private bool IsPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2)
-    {
-        // Check if x lies inside the x-coordinate range of the rectangle
-        bool xInRange = x > x1 && x < x2;
-
-        // Check if y lies inside the y-coordinate range of the rectangle
-        bool yInRange = y > y1 && y < y2;
-
-        // If both conditions are satisfied, the point is inside the rectangle
-        var ShouldDie = xInRange && yInRange;
-
-        return ShouldDie;
     }
 }

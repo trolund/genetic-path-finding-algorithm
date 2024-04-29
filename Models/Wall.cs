@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazor.Extensions.Canvas.Canvas2D;
 
 namespace BlazorCanvasTest2.Models
 {
@@ -21,6 +22,15 @@ namespace BlazorCanvasTest2.Models
         public void StepForward(double width, double height)
         {
 
+        }
+
+        public async void Display(Canvas2DContext ctx)
+        {
+            await ctx.BeginPathAsync();
+            await ctx.SetFillStyleAsync(Color);
+            await ctx.FillRectAsync(X, Y, Width, Height);
+            await ctx.FillAsync();
+            await ctx.StrokeAsync();
         }
     }
 }
