@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using SmartMonkey.Objects;
 using System.Linq;
 
 namespace BlazorCanvasTest2.Models
@@ -46,8 +45,7 @@ namespace BlazorCanvasTest2.Models
         /// <returns></returns>
         public Individual Crossover(Individual parent1, Individual parent2)
         {
-            // TODO conbine colors of the childs
-            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, parent1.Color, parent1.dna.GetLifeSpan());
+            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, Utils.ToHex(Utils.Blend(Utils.ToColor(parent1.Color), Utils.ToColor(parent2.Color), 0.5)), parent1.dna.GetLifeSpan());
 
             // Point of Crossover
             int crossoverPoint = Utils.random.Next(parent1.dna.GetLifeSpan());

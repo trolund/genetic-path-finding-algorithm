@@ -1,9 +1,6 @@
-﻿using BlazorCanvasTest2.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.ExceptionServices;
-using System.Threading;
 namespace BlazorCanvasTest2.Models
 {
     public class Population
@@ -53,7 +50,7 @@ namespace BlazorCanvasTest2.Models
             Individual[] tournament = new Individual[tournamentSize];
             for (int i = 0; i < tournamentSize; i++)
             {
-                if(Utils.GetRandomDouble() < 0.1) // cheat? (add previous best 10% of the time)
+                if(Utils.GetRandomDouble() < 0.1) 
                 {
                     tournament[i] = Individuals[BestIndex];
                 }
@@ -77,12 +74,11 @@ namespace BlazorCanvasTest2.Models
 
             newPopulation = newPopulation.OrderBy(x => x.Fitness).ToArray();
 
-            // replace the 10 weekeste agentes with the best 
+            // replace the x weakest agents with the best 
             for (int i = newPopulation.Length - 3; i < Individuals.Length; i++)
             {
                 newPopulation[i] = BestEver;
             }
-
 
             Individuals = newPopulation;
         }
