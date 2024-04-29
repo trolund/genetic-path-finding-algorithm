@@ -11,7 +11,7 @@ namespace BlazorCanvasTest2.Models
     public class DNA {
 
         private Vector2[] Genes;
-        private double maxForce = 1.5;
+        private double maxForce = 2.5;
         public static readonly Random random = new Random();
         public int LifeSpan;
 

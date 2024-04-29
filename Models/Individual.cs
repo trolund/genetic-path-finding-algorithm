@@ -49,6 +49,7 @@ namespace BlazorCanvasTest2.Models
 
         public void Kill()
         {
+            geneIndex = dna.GetLifeSpan();
             Alive = false;
         }
 
