@@ -6,15 +6,15 @@
 
 @inject IJSRuntime JsRuntime;
 
-<div id="canvasHolder" style="position: fixed; background-color: magenta; width: 600px; height: 800px">
+<div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 600px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
     <BECanvas Width="600" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
 @code{
     private Models.Population population = new Models.Population();
     private List<Models.Wall> walls = new List<Models.Wall>();
-    private Vector2 goal = new Vector2(250, 50);
-    private Vector2 start = new Vector2(250, 800);
+    private Vector2 goal = new Vector2(250, 80);
+    private Vector2 start = new Vector2(350, 800);
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -23,8 +23,8 @@
     {
         this.ctx = await _canvasReference.CreateCanvas2DAsync();
 
-        this.walls.Add(new Models.Wall(0, 250, 300, 20, "#a83299"));
-        this.walls.Add(new Models.Wall(200, 550, 300, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(-50, 250, 350, 20, "#25a16d"));
+        this.walls.Add(new Models.Wall(200, 550, 300, 20, "#25a16d"));
 
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();
@@ -56,19 +56,19 @@
         await this.ctx.BeginBatchAsync();
 
         await this.ctx.ClearRectAsync(0, 0, 600, 900);
-        await this.ctx.SetFillStyleAsync("#003366");
+        await this.ctx.SetFillStyleAsync("#FFF");
         await this.ctx.FillRectAsync(0, 0, 600, 900);
 
         await this.ctx.SetFontAsync("26px Segoe UI");
-        await this.ctx.SetFillStyleAsync("#FFFFFF");
-        await this.ctx.FillTextAsync("Genetic algorithm used for path finding", 10, 30);
+        await this.ctx.SetFillStyleAsync("#000");
+        //await this.ctx.FillTextAsync("Genetic algorithm used for path finding", 10, 30);
 
         await this.ctx.SetFontAsync("16px consolas");
         await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
         await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70);
         await this.ctx.FillTextAsync($"Best fitness: {population.BestFitness:0.000}", 10, 90);
 
-        await this.ctx.SetStrokeStyleAsync("#FFFFFF");
+        // await this.ctx.SetStrokeStyleAsync("#FFF");
 
         // kill balls if it hít any walls
         foreach (var ball in population.Individuals.Where(b => b.Alive))
@@ -106,13 +106,13 @@
         // draw start and goal
         // goal 
         await this.ctx.BeginPathAsync();
-        await this.ctx.SetFillStyleAsync("#a83210");
+        await this.ctx.SetFillStyleAsync("#2e2e2e");
         await this.ctx.ArcAsync(goal.X, goal.Y, 20, 0, 2 * Math.PI, false);
         await this.ctx.FillAsync();
         await this.ctx.StrokeAsync();
         // start 
         await this.ctx.BeginPathAsync();
-        await this.ctx.SetFillStyleAsync("#E23810");
+        await this.ctx.SetFillStyleAsync("#2e2e2e");
         await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
         await this.ctx.FillAsync();
         await this.ctx.StrokeAsync();

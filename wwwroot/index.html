@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <title>Blazor WebAssembly + HTML Canvas</title>
+    <title>Genetic algorithm used for path finding</title>
 </head>
 
-<body style="margin: 0px; background-color: #003366; color: white; font-family: sans-serif;">
+<body style="margin: 0px; background-color: white; color: white; font-family: sans-serif;">
     <app>
         <div style="margin: 1em; font-size: 2em;">Loading Blazor HTML canvas demo...</div>
     </app>
@@ -37,8 +37,8 @@
 
         window.initRenderJS = (instance) => {
             window.theInstance = instance;
-            window.addEventListener("resize", resizeCanvasToFitWindow);
-            resizeCanvasToFitWindow();
+            // window.addEventListener("resize", resizeCanvasToFitWindow);
+            // resizeCanvasToFitWindow();
             window.requestAnimationFrame(renderJS);
         };
 
