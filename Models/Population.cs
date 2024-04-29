@@ -139,8 +139,7 @@ namespace BlazorCanvasTest2.Models
 
         public bool IsGenerationDone()
         {
-            var first = Individuals.FirstOrDefault();
-            return first.geneIndex == first.dna.LifeSpan;
+            return Individuals.All(a => a.geneIndex == a.dna.LifeSpan);
         }
 
 

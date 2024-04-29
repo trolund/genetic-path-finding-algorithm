@@ -23,8 +23,8 @@
     {
         this.ctx = await _canvasReference.CreateCanvas2DAsync();
 
-        // this.walls.Add(new Models.Wall(100, 250, 200, 20, "#a83299"));
-        this.walls.Add(new Models.Wall(200, 450, 200, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(0, 250, 300, 20, "#a83299"));
+        this.walls.Add(new Models.Wall(200, 550, 300, 20, "#a83299"));
 
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();
@@ -41,7 +41,7 @@
     {
         if (population.Individuals == null)
         {
-            population.Initialize(start, 20, 200);
+            population.Initialize(start, 20, 250);
             Console.WriteLine("created balls at start");
         }else
         {
