@@ -13,7 +13,7 @@ namespace BlazorCanvasTest2.Models
         public Vector2 Pos { get; set; }
         public Vector2 Vel { get; private set; }
         public double R { get; private set; }
-        public string Color { get; private set; }
+        public string Color { get; set; }
         public bool Alive { get; private set; }
         public DNA dna { get; set; }
         public int geneIndex { get; set; }

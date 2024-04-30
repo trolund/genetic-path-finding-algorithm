@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 namespace BlazorCanvasTest2.Models
@@ -121,7 +122,7 @@ namespace BlazorCanvasTest2.Models
                 Individual parent1 = RankSelection();
                 Individual parent2 = RankSelection();
                 Individual child = parent1.dna.Crossover(parent1, parent2);
-                child.dna.Mutate(0.1); // TODO make it mach the controller
+                child.Color = Utils.ToHex(child.dna.Mutate(0.1, Utils.ToColor(child.Color))); // TODO make it mach the controller
                 newGeneration[i] = child;
             }
 

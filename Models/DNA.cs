@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace BlazorCanvasTest2.Models
 {
@@ -59,15 +60,59 @@ namespace BlazorCanvasTest2.Models
             return child;
         }
 
-        public void Mutate(double mutationRate)
+        private Vector2 CreateBiasVector()
         {
+            return Vector2.Multiply(new Vector2((float)(Utils.GetRandomDouble() - Utils.GetRandomFloat(-3.5, 4.5)), (float)(Utils.GetRandomDouble() - 1.5)), (float)Utils.GetRandomDouble(maxForce));
+        }
+
+        public Color Mutate(double mutationRate, Color c)
+        {
+            int r = c.R;
+            int g = c.G;
+            int b = c.B;
+
             for (int i = 0; i < Genes.Length; i++)
             {
                 if (Utils.GetRandomDouble() < mutationRate) 
                 {
-                    Genes[i] = Vector2.Multiply(new Vector2((float)(Utils.GetRandomDouble() - Utils.GetRandomFloat(-3.5, 4.5)), (float)(Utils.GetRandomDouble() - 1.5)), (float)Utils.GetRandomDouble(maxForce));
+                    int val = random.Next(0, 3);
+                    int pm = random.Next(0, 2);
+
+                    switch (val)
+                    {
+                        case 0:
+                            r += pm > 0 ? 5 : -5;
+                            break;
+                        case 1:
+                            g += pm > 0 ? 5 : -5;
+                            break;
+                        case 2:
+                            b += pm > 0 ? 5 : -5;
+                            break;
+                        default:
+                            // Handle other cases if needed
+                            break;
+                    }
+
+                    Genes[i] = CreateBiasVector();
                 }
             }
+
+            return Color.FromArgb(Bounds(r), Bounds(g), Bounds(b));
+        }
+
+        private int Bounds(int x)
+        {
+            if(x > 255)
+            {
+                return 255;
+            }
+            if(x < 0)
+            {
+                return 0;
+            }
+
+            return x;
         }
 
     }
