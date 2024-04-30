@@ -44,6 +44,13 @@
     private DateTime LastRender;
 
     [JSInvokable]
+    public void SetTarget(float x, float y)
+    {
+        goal.X = x;
+        goal.Y = y;
+    }
+
+    [JSInvokable]
     public void ResizeInBlazor(double width, double height) => Console.WriteLine("resize");
     //field.Resize(width, height);
 
@@ -95,6 +102,11 @@
         await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70 + offset);
         await this.ctx.FillTextAsync($"Best fitness: {population.BestEver.Fitness:0.000}", 10, 90 + offset);
         await this.ctx.FillTextAsync($"Best fitness in generation: {population.BestFitness:0.000}", 10, 110 + offset);
+
+        if (population.BestFitness > 10)
+        {
+            await this.ctx.FillTextAsync($"The goal have been reached!!", 10, 20);
+        }
 
         // draw start and goal
         // goal
