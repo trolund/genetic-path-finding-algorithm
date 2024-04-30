@@ -38,6 +38,7 @@ namespace BlazorCanvasTest2.Models
                     BestIndex = Array.IndexOf(Individuals, individual);
                 }
 
+                // set new best ever
                 if (individual.Fitness > BestEver.Fitness)
                 {
                     BestEver = individual;
@@ -53,7 +54,7 @@ namespace BlazorCanvasTest2.Models
             {
                 if(Utils.GetRandomDouble() < 0.1) 
                 {
-                    tournament[i] = Individuals[BestIndex];
+                    tournament[i] = Utils.GetRandomDouble() < 0.1 ? Individuals[BestIndex] : BestEver; // choose alltime best or gereration best
                 }
                 else
                 {
@@ -113,7 +114,7 @@ namespace BlazorCanvasTest2.Models
             return Individuals[0];
         }
 
-        public void GenerateNextGeneration()
+        public void GenerateNextGeneration(double mutationRate)
         {
             Individual[] newGeneration = new Individual[Individuals.Length];
 
@@ -122,7 +123,7 @@ namespace BlazorCanvasTest2.Models
                 Individual parent1 = RankSelection();
                 Individual parent2 = RankSelection();
                 Individual child = parent1.dna.Crossover(parent1, parent2);
-                child.Color = Utils.ToHex(child.dna.Mutate(0.1, Utils.ToColor(child.Color))); // TODO make it mach the controller
+                child.Color = Utils.ToHex(child.dna.Mutate(mutationRate, Utils.ToColor(child.Color))); // TODO make it mach the controller
                 newGeneration[i] = child;
             }
 
@@ -140,17 +141,17 @@ namespace BlazorCanvasTest2.Models
         }
 
 
-        public void StepForward(Vector2 target)
+        public void StepForward(Vector2 target, double mutationRate)
         {
 
             if (IsGenerationDone())
             {
                 CalculateFitness(target);
                 Selection();
-                GenerateNextGeneration();
+                GenerateNextGeneration(mutationRate);
                 Generation++;
 
-                Console.WriteLine($"Generation: {Generation}, Best Fitness: {BestFitness}");
+                Console.WriteLine($"Generation: {Generation}, Best Fitness in generation: {BestFitness}, Best Fitness: {BestEver.Fitness}");
             }
             else // make the agents move
             {
