@@ -24,7 +24,7 @@
     private Vector2 goal = new Vector2(250, 80);
     private Vector2 start = new Vector2(350, 800);
     private bool headless = false;
-    private double mutationRate = 0.1;
+    private double mutationRate = 0.01;
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -52,7 +52,7 @@
     {
         if (population.Individuals == null)
         {
-            population.Initialize(start, 50, 250);
+            population.Initialize(start, 30, 270);
             Console.WriteLine("created balls at start");
         }
 
@@ -96,6 +96,19 @@
         await this.ctx.FillTextAsync($"Best fitness: {population.BestEver.Fitness:0.000}", 10, 90 + offset);
         await this.ctx.FillTextAsync($"Best fitness in generation: {population.BestFitness:0.000}", 10, 110 + offset);
 
+        // draw start and goal
+        // goal
+        await this.ctx.BeginPathAsync();
+        await this.ctx.SetFillStyleAsync("#2e2e2e");
+        await this.ctx.ArcAsync(goal.X, goal.Y, 20, 0, 2 * Math.PI, false);
+        await this.ctx.FillAsync();
+        // start
+        await this.ctx.BeginPathAsync();
+        await this.ctx.SetFillStyleAsync("#2e2e2e");
+        await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
+        await this.ctx.FillAsync();
+
+
         foreach (var individual in population.Individuals)
         {
             individual.Display(ctx);
@@ -105,20 +118,6 @@
         {
             wall.Display(ctx);
         }
-
-        // draw start and goal
-        // goal
-        await this.ctx.BeginPathAsync();
-        await this.ctx.SetFillStyleAsync("#2e2e2e");
-        await this.ctx.ArcAsync(goal.X, goal.Y, 20, 0, 2 * Math.PI, false);
-        await this.ctx.FillAsync();
-        //await this.ctx.StrokeAsync();
-        // start
-        await this.ctx.BeginPathAsync();
-        await this.ctx.SetFillStyleAsync("#2e2e2e");
-        await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
-        await this.ctx.FillAsync();
-        //await this.ctx.StrokeAsync();
 
         await this.ctx.EndBatchAsync();
         }

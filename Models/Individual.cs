@@ -15,15 +15,15 @@ namespace BlazorCanvasTest2.Models
         public double R { get; private set; }
         public string Color { get; set; }
         public bool Alive { get; private set; }
-        public DNA dna { get; set; }
-        public int geneIndex { get; set; }
+        public DNA Dna { get; set; }
+        public int GeneIndex { get; set; }
         public double Fitness { get; set; }
         public Vector2 Start { get; set; }
 
         public Individual(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan)
         {
             this.Alive = true;
-            dna = new DNA(lifeSpan);
+            Dna = new DNA(lifeSpan);
             Pos = start;
             Vel = vel;
             Start = start;
@@ -46,7 +46,6 @@ namespace BlazorCanvasTest2.Models
                 await ctx.ArcAsync(Pos.X, Pos.Y, R, 0, 2 * Math.PI, false);
                 await ctx.SetFillStyleAsync(Color);
                 await ctx.FillAsync();
-                // await ctx.StrokeAsync();
             }
         }
 
@@ -62,15 +61,15 @@ namespace BlazorCanvasTest2.Models
         }
         private void ApplyForce()
         {
-            if (geneIndex < dna.GetLifeSpan())
+            if (GeneIndex < Dna.GetLifeSpan())
             {
-                Pos = Pos + dna.GetStep(geneIndex);
-                geneIndex++;
+                Pos = Pos + Dna.GetStep(GeneIndex);
+                GeneIndex++;
             }
         }
         private void Kill()
         {
-            geneIndex = dna.GetLifeSpan();
+            GeneIndex = Dna.GetLifeSpan();
             Alive = false;
         }
         public double CalculateFitness(Vector2 target)

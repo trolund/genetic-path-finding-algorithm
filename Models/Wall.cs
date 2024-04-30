@@ -19,18 +19,11 @@ namespace BlazorCanvasTest2.Models
             (X, Y, Width, Height, Color) = (x, y, width, height, color);
         }
 
-        public void StepForward(double width, double height)
-        {
-
-        }
-
         public async void Display(Canvas2DContext ctx)
         {
             await ctx.BeginPathAsync();
             await ctx.SetFillStyleAsync(Color);
             await ctx.FillRectAsync(X, Y, Width, Height);
-            await ctx.FillAsync();
-            await ctx.StrokeAsync();
         }
     }
 }

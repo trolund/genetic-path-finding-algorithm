@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
 namespace BlazorCanvasTest2.Models
@@ -122,8 +121,8 @@ namespace BlazorCanvasTest2.Models
             {
                 Individual parent1 = RankSelection();
                 Individual parent2 = RankSelection();
-                Individual child = parent1.dna.Crossover(parent1, parent2);
-                child.Color = Utils.ToHex(child.dna.Mutate(mutationRate, Utils.ToColor(child.Color))); // TODO make it mach the controller
+                Individual child = parent1.Dna.Crossover(parent1, parent2);
+                child.Color = Utils.ToHex(child.Dna.Mutate(mutationRate, Utils.ToColor(child.Color))); // TODO make it mach the controller
                 newGeneration[i] = child;
             }
 
@@ -137,7 +136,7 @@ namespace BlazorCanvasTest2.Models
 
         public bool IsGenerationDone()
         {
-            return Individuals.All(a => a.geneIndex == a.dna.LifeSpan);
+            return Individuals.All(a => a.GeneIndex == a.Dna.LifeSpan);
         }
 
 
@@ -160,18 +159,6 @@ namespace BlazorCanvasTest2.Models
             }
 
         }
-
-        /*        public bool IsFinished(string target)
-                {
-                    foreach (Individual_old individual in Individuals)
-                    {
-                        if (individual.Genes == target)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                }*/
     }
 }
 
