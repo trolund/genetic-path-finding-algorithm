@@ -46,7 +46,7 @@ namespace BlazorCanvasTest2.Models
                 await ctx.ArcAsync(Pos.X, Pos.Y, R, 0, 2 * Math.PI, false);
                 await ctx.SetFillStyleAsync(Color);
                 await ctx.FillAsync();
-                await ctx.StrokeAsync();
+                // await ctx.StrokeAsync();
             }
         }
 

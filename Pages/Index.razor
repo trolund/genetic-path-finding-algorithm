@@ -6,7 +6,9 @@
 
 @inject IJSRuntime JsRuntime;
 
+<p>Headless:</p><input type="checkbox" value="@headless" @onchange="eventArgs => { headless = (bool) eventArgs.Value; }" />
 <div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 600px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
+    
     <BECanvas Width="600" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
@@ -15,6 +17,7 @@
     private List<Models.Wall> walls = new List<Models.Wall>();
     private Vector2 goal = new Vector2(250, 80);
     private Vector2 start = new Vector2(350, 800);
+    private bool headless = false;
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -43,15 +46,34 @@
         {
             population.Initialize(start, 20, 250);
             Console.WriteLine("created balls at start");
-        }else
+        }
+        else
         {
             Console.WriteLine("number of balls:", population.Individuals.Length);
         }
 
+        await Update();
+        if (!headless)
+        {
+            await Draw();
+        }
+    }
+
+    public async Task Update()
+    {
+        population.StepForward(goal);
+
+        // kill balls if it hít any walls
+        foreach (var agent in population.Individuals.Where(b => b.Alive))
+        {
+            agent.HitObstacles(walls);
+        }
+    }
+
+    public async Task Draw()
+    {
         double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
         LastRender = DateTime.Now;
-
-        population.StepForward(goal);
 
         await this.ctx.BeginBatchAsync();
 
@@ -67,14 +89,6 @@
         await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70);
         await this.ctx.FillTextAsync($"Best fitness: {population.BestFitness:0.000}", 10, 90);
 
-        // await this.ctx.SetStrokeStyleAsync("#FFF");
-
-        // kill balls if it hít any walls
-        foreach (var agent in population.Individuals.Where(b => b.Alive))
-        {
-            agent.HitObstacles(walls);
-        }
-
         foreach (var individual in population.Individuals)
         {
             individual.Display(ctx);
@@ -82,23 +96,24 @@
 
         foreach (var wall in this.walls)
         {
-           wall.Display(ctx);
+            wall.Display(ctx);
         }
 
         // draw start and goal
-        // goal 
+        // goal
         await this.ctx.BeginPathAsync();
         await this.ctx.SetFillStyleAsync("#2e2e2e");
         await this.ctx.ArcAsync(goal.X, goal.Y, 20, 0, 2 * Math.PI, false);
         await this.ctx.FillAsync();
-        await this.ctx.StrokeAsync();
-        // start 
+        //await this.ctx.StrokeAsync();
+        // start
         await this.ctx.BeginPathAsync();
         await this.ctx.SetFillStyleAsync("#2e2e2e");
         await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
         await this.ctx.FillAsync();
-        await this.ctx.StrokeAsync();
+        //await this.ctx.StrokeAsync();
 
         await this.ctx.EndBatchAsync();
+        }
     }
 }
