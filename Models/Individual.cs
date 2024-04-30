@@ -91,10 +91,10 @@ namespace BlazorCanvasTest2.Models
         private bool IsPointInsideRectangle(double x, double y, double x1, double y1, double x2, double y2)
         {
             // Check if x lies inside the x-coordinate range of the rectangle
-            bool xInRange = x > x1 && x < x2;
+            bool xInRange = (x + R) > x1 && (x + R) < x2 || (x - R) > x1 && (x - R) < x2;
 
             // Check if y lies inside the y-coordinate range of the rectangle
-            bool yInRange = y > y1 && y < y2;
+            bool yInRange = (y + R) > y1 && (y + R) < y2 || (y - R) > y1 && (y - R) < y2;
 
             // If both conditions are satisfied, the point is inside the rectangle
             var ShouldDie = xInRange && yInRange;

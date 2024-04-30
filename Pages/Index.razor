@@ -9,7 +9,7 @@
 <div style="color: black;">
     <label>
         Headless:
-        <input type="checkbox" value="@headless" @onchange="eventArgs => { headless = (bool) eventArgs.Value; PaintWhite(); }" /></label>
+        <input type="checkbox" value="@headless" @onchange="async eventArgs => { headless = (bool) eventArgs.Value; await PaintWhite(); }" /></label>
     <label>
         Mutation rate:
         <input type="number" @bind="mutationRate" />
@@ -40,7 +40,7 @@
     private Vector2 start = new Vector2(350, 800);
     private bool headless = false;
     private double mutationRate = 0.01;
-    private double smootness = 0.33;
+    private double smootness = 0.15;
     private bool started = false;
     private int populationSize = 30;
     private int genomSize = 130;
