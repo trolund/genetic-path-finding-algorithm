@@ -136,13 +136,12 @@ namespace BlazorCanvasTest2.Models
 
         public bool IsGenerationDone()
         {
-            return Individuals.All(a => a.GeneIndex == a.Dna.LifeSpan);
+            return Individuals.All(a => a.GeneIndex >= a.Dna.LifeSpan);
         }
 
 
-        public void StepForward(Vector2 target, double mutationRate)
+        public void StepForward(Vector2 target, double mutationRate, float smoothness)
         {
-
             if (IsGenerationDone())
             {
                 CalculateFitness(target);
@@ -155,7 +154,7 @@ namespace BlazorCanvasTest2.Models
             else // make the agents move
             {
                 foreach (Individual individual in Individuals)
-                    individual.StepForward();
+                    individual.StepForward(smoothness);
             }
 
         }

@@ -7,11 +7,26 @@
 @inject IJSRuntime JsRuntime;
 
 <div style="color: black;">
-    <label>Headless:<input type="checkbox" value="@headless" @onchange="eventArgs => { headless = (bool) eventArgs.Value; }" /></label>
+    <label>
+        Headless:
+        <input type="checkbox" value="@headless" @onchange="eventArgs => { headless = (bool) eventArgs.Value; PaintWhite(); }" /></label>
     <label>
         Mutation rate:
-        <input @bind="mutationRate" />
+        <input type="number" @bind="mutationRate" />
     </label>
+    <label>
+        speed:
+        <input type="number" @bind="smootness" />
+    </label>
+    <label>
+        Population size:
+        <input disabled="@started" type="number" @bind="populationSize" />
+    </label>
+    <label>
+        Genom size:
+        <input disabled="@started" type="number" @bind="genomSize" />
+    </label>
+    <button @onclick="Start">Start</button>
 </div>
 <div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 800px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
     
@@ -25,6 +40,10 @@
     private Vector2 start = new Vector2(350, 800);
     private bool headless = false;
     private double mutationRate = 0.01;
+    private double smootness = 0.33;
+    private bool started = false;
+    private int populationSize = 30;
+    private int genomSize = 130;
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -33,12 +52,15 @@
     {
         this.ctx = await _canvasReference.CreateCanvas2DAsync();
 
-        this.walls.Add(new Models.Wall(-50, 250, 350, 20, "#25a16d"));
+        this.walls.Add(new Models.Wall(-250, 250, 550, 20, "#25a16d"));
         this.walls.Add(new Models.Wall(200, 550, 300, 20, "#25a16d"));
         this.walls.Add(new Models.Wall(450, 350, 450, 20, "#25a16d"));
+    }
 
+    private async Task Start(){
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();
+        started = true;
     }
 
     private DateTime LastRender;
@@ -51,34 +73,54 @@
     }
 
     [JSInvokable]
-    public void ResizeInBlazor(double width, double height) => Console.WriteLine("resize");
-    //field.Resize(width, height);
-
-    [JSInvokable]
     public async ValueTask RenderInBlazor(float timeStamp)
     {
         if (population.Individuals == null)
         {
-            population.Initialize(start, 30, 270);
-            Console.WriteLine("created balls at start");
+            population.Initialize(start, populationSize, genomSize);
+            Console.WriteLine("agents created at start");
         }
 
-        await Update();
+        Update();
         if (!headless)
         {
             await Draw();
         }
     }
-
-    public async Task Update()
+    public void Update()
     {
-        population.StepForward(goal, mutationRate);
+        population.StepForward(goal, mutationRate, headless ? 1 : (float) smootness);
 
         // kill balls if it hít any walls
         foreach (var agent in population.Individuals.Where(b => b.Alive))
         {
             agent.HitObstacles(walls);
+            agent.LeavingSpace(800, 900);
         }
+    }
+
+    public async Task PaintWhite(){
+        double fps = 0;
+
+        await this.ctx.BeginBatchAsync();
+
+        await this.ctx.ClearRectAsync(0, 0, 800, 900);
+        await this.ctx.SetFillStyleAsync("#FFF");
+        await this.ctx.FillRectAsync(0, 0, 800, 900);
+
+        await this.ctx.SetFontAsync("26px Segoe UI");
+        await this.ctx.SetFillStyleAsync("#000");
+        await this.ctx.FillTextAsync($"See the console", 30, 100);
+
+        var offset = 780;
+
+        await this.ctx.SetFontAsync("16px consolas");
+        await this.ctx.FillTextAsync($"FPS: {fps:0.000}", 10, 50 + offset);
+        await this.ctx.FillTextAsync($"Generation: {population.Generation:0}", 10, 70 + offset);
+        await this.ctx.FillTextAsync($"Best fitness: {population.BestEver.Fitness:0.000}", 10, 90 + offset);
+        await this.ctx.FillTextAsync($"Best fitness in generation: {population.BestFitness:0.000}", 10, 110 + offset);
+
+        await this.ctx.EndBatchAsync();
     }
 
     public async Task Draw()

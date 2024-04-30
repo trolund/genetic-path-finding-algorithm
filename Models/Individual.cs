@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
 
 namespace BlazorCanvasTest2.Models
@@ -16,28 +13,26 @@ namespace BlazorCanvasTest2.Models
         public string Color { get; set; }
         public bool Alive { get; private set; }
         public DNA Dna { get; set; }
-        public int GeneIndex { get; set; }
+        public double GeneIndex { get; set; }
         public double Fitness { get; set; }
         public Vector2 Start { get; set; }
 
         public Individual(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan)
         {
-            this.Alive = true;
+            Alive = true;
             Dna = new DNA(lifeSpan);
             Pos = start;
             Vel = vel;
             Start = start;
             (R, Color) = (radius, color);
         }
-
-        public void StepForward()
+        public void StepForward(float smoothness)
         {
             if (Alive) // only move if it is alive
             {
-                ApplyForce();
+                ApplyForce(smoothness);
             }
         }
-
         public async void Display(Canvas2DContext ctx)
         {
             if (Alive) // only show ball if it is alive
@@ -48,8 +43,7 @@ namespace BlazorCanvasTest2.Models
                 await ctx.FillAsync();
             }
         }
-
-        public void HitObstacles(List<Models.Wall> walls)
+        public void HitObstacles(List<Wall> walls)
         {
             foreach (var wall in walls)
             {
@@ -59,12 +53,21 @@ namespace BlazorCanvasTest2.Models
                 }
             }
         }
-        private void ApplyForce()
+        public void LeavingSpace(int width, int height)
+        {
+            // if individual have left the space then kill it
+            if (Pos.X < 0 || Pos.Y < 0 || Pos.X > width || Pos.Y > height){
+                Kill();
+            }
+        }
+        private void ApplyForce(float smoothness)
         {
             if (GeneIndex < Dna.GetLifeSpan())
             {
-                Pos = Pos + Dna.GetStep(GeneIndex);
-                GeneIndex++;
+                Pos = Pos + Vector2.Multiply(Dna.GetStep((int) Math.Floor(GeneIndex)), smoothness);
+                GeneIndex += smoothness;
+            }else {
+                GeneIndex = Dna.GetLifeSpan();
             }
         }
         private void Kill()

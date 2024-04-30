@@ -11,7 +11,7 @@ namespace BlazorCanvasTest2.Models
     public class DNA {
 
         private Vector2[] Genes;
-        private double maxForce = 4.7;
+        private double maxForce = 10;
         public static readonly Random random = new Random();
         public int LifeSpan;
 
@@ -87,9 +87,6 @@ namespace BlazorCanvasTest2.Models
                             break;
                         case 2:
                             b += pm > 0 ? 5 : -5;
-                            break;
-                        default:
-                            // Handle other cases if needed
                             break;
                     }
 
