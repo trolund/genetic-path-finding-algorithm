@@ -79,7 +79,7 @@ namespace BlazorCanvasTest2.Models
 
             if (!Alive)
             {
-                fitness = fitness - (fitness * 0.2);
+                fitness = fitness - (fitness * 0.9);
             }
 
             Fitness = fitness * 100;
