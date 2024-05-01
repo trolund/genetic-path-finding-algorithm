@@ -1,12 +1,11 @@
 ﻿@page "/"
 
-@using Blazor.Extensions
-@using Blazor.Extensions.Canvas.Canvas2D
-@using System.Numerics;
-
 @inject IJSRuntime JsRuntime;
 
-<div style="color: black; width: 800px; margin-left: auto; margin-right: auto;">
+<h1>
+Genetic algorithm used for path-finding
+</h1>
+<div class="menu" style="color: black; width: 800px; margin-left: auto; margin-right: auto;">
     <label>
         Headless:
         <input type="checkbox" value="@headless" @onchange="async eventArgs => { headless = (bool) eventArgs.Value; await PaintWhite(); }" /></label>
