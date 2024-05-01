@@ -1,22 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace BlazorCanvasTest2.Models
 {
     public class DNA {
 
         private Vector2[] Genes;
-        private double maxForce = 10;
+        private double MaxForce = 10;
         public static readonly Random random = new Random();
         public int LifeSpan;
 
-        public DNA(int lifeSpan) {
+        public DNA(int lifeSpan, double maxForce) {
             LifeSpan = lifeSpan;
+            MaxForce = maxForce;
             CreateGenomes();
         }
 
@@ -45,7 +43,7 @@ namespace BlazorCanvasTest2.Models
         /// <returns></returns>
         public Individual Crossover(Individual parent1, Individual parent2)
         {
-            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, Utils.ToHex(Utils.Blend(Utils.ToColor(parent1.Color), Utils.ToColor(parent2.Color), 0.5)), parent1.Dna.GetLifeSpan());
+            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, Utils.ToHex(Utils.Blend(Utils.ToColor(parent1.Color), Utils.ToColor(parent2.Color), 0.5)), parent1.Dna.GetLifeSpan(), parent1.Dna.MaxForce);
 
             // Point of Crossover
             int crossoverPoint = Utils.random.Next(parent1.Dna.GetLifeSpan());
@@ -61,7 +59,7 @@ namespace BlazorCanvasTest2.Models
 
         private Vector2 CreateBiasVector()
         {
-            return Vector2.Multiply(new Vector2((float)(Utils.GetRandomDouble() - Utils.GetRandomFloat(-6.5, 7.5)), (float)(Utils.GetRandomDouble() - 1.5)), (float)Utils.GetRandomDouble(maxForce));
+            return Vector2.Add(Vector2.Multiply(new Vector2((float)(Utils.GetRandomDouble() - Utils.GetRandomFloat(-6.5, 7.5)), (float)(Utils.GetRandomDouble() - 1.5)), (float)Utils.GetRandomDouble(MaxForce)), Vector2.One);
         }
 
         public Color Mutate(double mutationRate, Color c)

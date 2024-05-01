@@ -12,16 +12,16 @@ namespace BlazorCanvasTest2.Models
         public int Generation {  get; set; }   
         public Individual BestEver { get; set; }
 
-        public void Initialize(Vector2 start, int populationSize, int lifespan)
+        public void Initialize(Vector2 start, int populationSize, int lifespan, double maxForce)
         {
             Individuals = new Individual[populationSize];
             for (int i = 0; i < populationSize; i++)
             {
-                Individuals[i] = new Individual(start, new Vector2(0,0), 10, Utils.RandomHexColor(), lifespan);
+                Individuals[i] = new Individual(start, new Vector2(0,0), 10, Utils.RandomHexColor(), lifespan, maxForce);
             }
 
             // just fitness 0
-            BestEver = new Individual(start, new Vector2(0, 0), 10, Utils.RandomHexColor(), lifespan);
+            BestEver = new Individual(start, new Vector2(0, 0), 10, Utils.RandomHexColor(), lifespan, maxForce);
         }
 
         public void CalculateFitness(Vector2 target)

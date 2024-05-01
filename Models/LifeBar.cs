@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -23,11 +24,17 @@ namespace BlazorCanvasTest2.Models
         }
         public async Task Display(Canvas2DContext ctx)
         {
-            var p = Max/100 * Progress * 2;
+            float r = (float)Progress/(float)Max;
+            int p = (int)(r * 100) * 2;
 
             await ctx.BeginPathAsync();
             await ctx.SetFillStyleAsync("#212121");
-            await ctx.FillRectAsync(Pos.X, Pos.Y, 280, 30);
+            await ctx.FillRectAsync(Pos.X, Pos.Y, 210, 30);
+            await ctx.FillAsync();
+
+            await ctx.BeginPathAsync();
+            await ctx.SetFillStyleAsync("#303030");
+            await ctx.FillRectAsync(Pos.X + 5, Pos.Y + 5, 200, 20);
             await ctx.FillAsync();
 
             await ctx.BeginPathAsync();

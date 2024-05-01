@@ -26,6 +26,10 @@
         Genom size:
         <input width="70" min="5" max="1000" disabled="@started" type="number" @bind="genomSize" />
     </label>
+    <label>
+        Max movement force:
+        <input width="70" min="0.1" max="1000" disabled="@started" type="number" @bind="maxForce" />
+    </label>
     <button style="width: 100px; padding: 5px; margin-left: auto; margin-right: auto;" @onclick="Start">Start</button>
 </div>
 <div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 800px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
@@ -43,9 +47,9 @@
     private double smootness = 0.15;
     private bool started = false;
     private int populationSize = 30;
-    private int genomSize = 130;
+    private int genomSize = 100;
+    private double maxForce = 14;
     private Models.LifeBar bar;
-
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
 
@@ -59,7 +63,7 @@
     }
 
     private async Task Start(){
-        bar = new Models.LifeBar(new Vector2(520, 870), 0, genomSize);
+        bar = new Models.LifeBar(new Vector2(580, 860), 0, genomSize);
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();
         started = true;
@@ -79,7 +83,7 @@
     {
         if (population.Individuals == null)
         {
-            population.Initialize(start, populationSize, genomSize);
+            population.Initialize(start, populationSize, genomSize, maxForce);
             Console.WriteLine("agents created at start");
         }
 
@@ -105,7 +109,7 @@
         if(item == null){
             bar.StepForward(0);
         }else {
-            bar.StepForward((int)Math.Floor(item.GeneIndex));
+            bar.StepForward(Convert.ToInt32(item.GeneIndex));
         }
         
     }

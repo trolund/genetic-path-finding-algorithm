@@ -17,10 +17,10 @@ namespace BlazorCanvasTest2.Models
         public double Fitness { get; set; }
         public Vector2 Start { get; set; }
 
-        public Individual(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan)
+        public Individual(Vector2 start, Vector2 vel, double radius, string color, int lifeSpan, double maxForce)
         {
             Alive = true;
-            Dna = new DNA(lifeSpan);
+            Dna = new DNA(lifeSpan, maxForce);
             Pos = start;
             Vel = vel;
             Start = start;
