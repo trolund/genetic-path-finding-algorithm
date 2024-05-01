@@ -9,22 +9,12 @@ namespace BlazorCanvasTest2.Models
 
         private int Max;
         private int Progress;
-        private Color outer;
-        private Color inner;
-
         private Vector2 Pos;
-
 
         public LifeBar(Vector2 pos, int progress, int max) {
             Max = max;
             Progress = progress;
             Pos = pos;
-            outer = Color.FromArgb(0, 0, 250);
-            inner = Color.FromArgb(155, 60, 0);
-        }
-
-        public void Reset(){
-            Progress = 0;
         }
         
         public void StepForward(int progress)
