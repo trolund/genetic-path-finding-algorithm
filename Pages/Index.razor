@@ -36,6 +36,7 @@
 @code{
     private Models.Population population = new Models.Population();
     private List<Models.Wall> walls = new List<Models.Wall>();
+    
     private Vector2 goal = new Vector2(250, 80);
     private Vector2 start = new Vector2(350, 800);
     private bool headless = false;
@@ -44,6 +45,7 @@
     private bool started = false;
     private int populationSize = 30;
     private int genomSize = 130;
+    private Models.LifeBar bar;
 
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -58,6 +60,7 @@
     }
 
     private async Task Start(){
+        bar = new Models.LifeBar(new Vector2(520, 870), 0, genomSize);
         await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
         await base.OnInitializedAsync();
         started = true;
@@ -92,11 +95,14 @@
         population.StepForward(goal, mutationRate, headless ? 1 : (float) smootness);
 
         // kill balls if it hít any walls
-        foreach (var agent in population.Individuals.Where(b => b.Alive))
+        var aliveAgents = population.Individuals.Where(b => b.Alive);
+        foreach (var agent in aliveAgents)
         {
             agent.HitObstacles(walls);
             agent.LeavingSpace(800, 900);
         }
+
+        bar.StepForward((int)Math.Floor(aliveAgents.FirstOrDefault().GeneIndex));
     }
 
     public async Task PaintWhite(){
@@ -172,7 +178,7 @@
         {
             wall.Display(ctx);
         }
-
+        await bar.Display(ctx);
         await this.ctx.EndBatchAsync();
         }
     }
