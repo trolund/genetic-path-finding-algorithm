@@ -26,12 +26,12 @@ namespace BlazorCanvasTest2.Models
             var p = Max/100 * Progress * 2;
 
             await ctx.BeginPathAsync();
-            await ctx.SetFillStyleAsync("#8b95a3");
+            await ctx.SetFillStyleAsync("#212121");
             await ctx.FillRectAsync(Pos.X, Pos.Y, 280, 30);
             await ctx.FillAsync();
 
             await ctx.BeginPathAsync();
-            await ctx.SetFillStyleAsync("#1f824c");
+            await ctx.SetFillStyleAsync("#e37730");
             await ctx.FillRectAsync(Pos.X + 5, Pos.Y + 5, p, 20);
             await ctx.FillAsync();
         }

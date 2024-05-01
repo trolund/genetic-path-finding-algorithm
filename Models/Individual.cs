@@ -42,6 +42,13 @@ namespace BlazorCanvasTest2.Models
                 await ctx.SetFillStyleAsync(Color);
                 await ctx.FillAsync();
             }
+            else 
+            {
+                await ctx.BeginPathAsync();
+                await ctx.ArcAsync(Pos.X, Pos.Y, R, 0, 2 * Math.PI, false);
+                await ctx.SetFillStyleAsync("#e4e7ed");
+                await ctx.FillAsync();
+            }
         }
         public void HitObstacles(List<Wall> walls)
         {
