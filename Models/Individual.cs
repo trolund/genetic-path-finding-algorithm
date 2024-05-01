@@ -35,7 +35,7 @@ namespace BlazorCanvasTest2.Models
         }
         public async void Display(Canvas2DContext ctx)
         {
-            if (Alive) // only show ball if it is alive
+            if (Alive)
             {
                 await ctx.BeginPathAsync();
                 await ctx.ArcAsync(Pos.X, Pos.Y, R, 0, 2 * Math.PI, false);

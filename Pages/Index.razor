@@ -93,7 +93,7 @@
     {
         population.StepForward(goal, mutationRate, headless ? 1 : (float) smootness);
 
-        // kill balls if it hít any walls
+        // kill agents if it hít any walls or leave the space
         var aliveAgents = population.Individuals.Where(b => b.Alive);
         foreach (var agent in aliveAgents)
         {
