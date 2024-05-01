@@ -6,30 +6,29 @@
 
 @inject IJSRuntime JsRuntime;
 
-<div style="color: black;">
+<div style="color: black; width: 800px; margin-left: auto; margin-right: auto;">
     <label>
         Headless:
         <input type="checkbox" value="@headless" @onchange="async eventArgs => { headless = (bool) eventArgs.Value; await PaintWhite(); }" /></label>
     <label>
         Mutation rate:
-        <input type="number" @bind="mutationRate" />
+        <input step="0.05" style="width: 80px;" max="1" min="0" type="number" @bind="mutationRate" />
     </label>
     <label>
         speed:
-        <input type="number" @bind="smootness" />
+        <input step="0.05" style="width: 80px;" width="170" max="1" min="0" type="number" @bind="smootness" />
     </label>
     <label>
         Population size:
-        <input disabled="@started" type="number" @bind="populationSize" />
+        <input width="70" min="5" max="1000" disabled="@started" type="number" @bind="populationSize" />
     </label>
     <label>
         Genom size:
-        <input disabled="@started" type="number" @bind="genomSize" />
+        <input width="70" min="5" max="1000" disabled="@started" type="number" @bind="genomSize" />
     </label>
-    <button @onclick="Start">Start</button>
+    <button style="width: 100px; padding: 5px; margin-left: auto; margin-right: auto;" @onclick="Start">Start</button>
 </div>
 <div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 800px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
-    
     <BECanvas Width="800" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
@@ -102,7 +101,13 @@
             agent.LeavingSpace(800, 900);
         }
 
-        bar.StepForward((int)Math.Floor(aliveAgents.FirstOrDefault().GeneIndex));
+        var item = aliveAgents.FirstOrDefault();
+        if(item == null){
+            bar.StepForward(0);
+        }else {
+            bar.StepForward((int)Math.Floor(item.GeneIndex));
+        }
+        
     }
 
     public async Task PaintWhite(){
