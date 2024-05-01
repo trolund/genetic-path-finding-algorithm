@@ -51,9 +51,10 @@ namespace BlazorCanvasTest2.Models
             Individual[] tournament = new Individual[tournamentSize];
             for (int i = 0; i < tournamentSize; i++)
             {
-                if(Utils.GetRandomDouble() < 0.1) 
+                if(Utils.GetRandomDouble() < 0.2) 
                 {
-                    tournament[i] = Utils.GetRandomDouble() < 0.1 ? Individuals[BestIndex] : BestEver; // choose alltime best or gereration best
+                    // tournament[i] = Utils.GetRandomDouble() < 0.1 ? Individuals[BestIndex] : BestEver; // choose alltime best or gereration best
+                    tournament[i] = Individuals[BestIndex]; 
                 }
                 else
                 {
