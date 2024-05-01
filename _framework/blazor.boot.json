@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BlazorCanvasTest2",
   "resources": {
-    "hash": "sha256-wLZ9viC78CCd2qpzKHSzd2oeviUWE6PlAD/+E7zsp0Y=",
+    "hash": "sha256-AphHovML/zCJyc8E3xFadSp9DA9Fk/UIHTQjJ1+9+P0=",
     "jsModuleNative": {
       "dotnet.native.8.0.4.panenwcc0v.js": "sha256-BsaBOB7rs58dTJYIDzgRAFJi68fZSgclGo8zLpuoRns="
     },
@@ -19,7 +19,7 @@
     "assembly": {
       "Blazor.Extensions.Canvas.JS.wasm": "sha256-ctyeKHsvFswpiKQJpTUUWdSrDGr4UNirukOrWYnwW78=",
       "Blazor.Extensions.Canvas.wasm": "sha256-2AOrAB5tgoiK9wMMmwiE/pKPAtTjzgFudxSl6g4dt9s=",
-      "BlazorCanvasTest2.wasm": "sha256-Fxy5wkaNeKbz+jWFyGiR5Ffc288Wq4rSgyQQ8d1Cm54=",
+      "BlazorCanvasTest2.wasm": "sha256-BZV0meiEOQCcr9aRCEmqvWNu4szozWNq5C8EUJO9t7k=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-hd/KXZcKf54kd1NJfqyJmBblHQCcfpFga7T93Fj6Cs0=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-6YKsCJCEP8WCMLqe8FvXSHC3g9c14v4sXw5j4GsLysA=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-kZSJV9ON9UL924dyAnAeoFHZXExv5A/OCxTHlMc+3fQ=",
