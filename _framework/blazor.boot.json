@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "blazor-canvas-ga-path-finding",
   "resources": {
-    "hash": "sha256-h6lRZkVLRkWzNEXKsTZnplKC63Q8OQHpqRgdQKlRfw8=",
+    "hash": "sha256-zTixUIGlctaXnJ053gL1s4h+NIoCnjZjn1y6m92qpbo=",
     "jsModuleNative": {
       "dotnet.native.8.0.4.panenwcc0v.js": "sha256-BsaBOB7rs58dTJYIDzgRAFJi68fZSgclGo8zLpuoRns="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "blazor-canvas-ga-path-finding.wasm": "sha256-iDML4+uBvmj5a4C1MZBvNwTB4IaKYzjRM2T7T9sGIZw=",
+      "blazor-canvas-ga-path-finding.wasm": "sha256-AKye+oKF6kWvWMKzw7ss2nmfVGG0YL5HCx9og57+Zo8=",
       "Blazor.Extensions.Canvas.JS.wasm": "sha256-ctyeKHsvFswpiKQJpTUUWdSrDGr4UNirukOrWYnwW78=",
       "Blazor.Extensions.Canvas.wasm": "sha256-2AOrAB5tgoiK9wMMmwiE/pKPAtTjzgFudxSl6g4dt9s=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-Ltxj+J3+hWrAdSJsg1NmFFPf+sBK81vpWUPwHVTovLI=",
