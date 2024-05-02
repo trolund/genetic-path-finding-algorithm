@@ -1,12 +1,10 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
-namespace BlazorCanvasTest2.Models
+namespace Controllers
 {
-	public static class Utils
-	{
+    public static class Utils
+    {
         public static readonly Random random = new Random();
 
         public static double GetRandomDouble()
@@ -17,7 +15,7 @@ namespace BlazorCanvasTest2.Models
         // random between min and max 
         public static float GetRandomFloat(double min, double max)
         {
-            return (float) (random.NextDouble() * (max - min) + min);
+            return (float)(random.NextDouble() * (max - min) + min);
         }
 
         public static double GetRandomDouble(double max)
@@ -27,7 +25,7 @@ namespace BlazorCanvasTest2.Models
 
         public static string RandomHexColor()
         {
-            return String.Format("#{0:X6}", random.Next(0x1000000)); // = "#A197B9"
+            return string.Format("#{0:X6}", random.Next(0x1000000)); // = "#A197B9"
         }
 
         /// <summary>Blends the specified colors together.</summary>
@@ -38,9 +36,9 @@ namespace BlazorCanvasTest2.Models
         /// <returns>The blended colors.</returns>
         public static Color Blend(this Color color, Color backColor, double amount)
         {
-            byte r = (byte) (color.R * amount + backColor.R * (1 - amount));
-            byte g = (byte) (color.G * amount + backColor.G * (1 - amount));
-            byte b = (byte) (color.B * amount + backColor.B * (1 - amount));
+            byte r = (byte)(color.R * amount + backColor.R * (1 - amount));
+            byte g = (byte)(color.G * amount + backColor.G * (1 - amount));
+            byte b = (byte)(color.B * amount + backColor.B * (1 - amount));
             return Color.FromArgb(r, g, b);
         }
 

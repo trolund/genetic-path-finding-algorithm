@@ -2,17 +2,20 @@ using System;
 using System.Drawing;
 using System.Numerics;
 using System.Linq;
+using blazor_canvas_ga_path_finding.Models;
 
-namespace BlazorCanvasTest2.Models
+namespace Controllers
 {
-    public class DNA {
+    public class DNA
+    {
 
         private Vector2[] Genes;
         private double MaxForce = 10;
         public static readonly Random random = new Random();
         public int LifeSpan;
 
-        public DNA(int lifeSpan, double maxForce) {
+        public DNA(int lifeSpan, double maxForce)
+        {
             LifeSpan = lifeSpan;
             MaxForce = maxForce;
             CreateGenomes();
@@ -28,9 +31,11 @@ namespace BlazorCanvasTest2.Models
             return LifeSpan;
         }
 
-        private void CreateGenomes() {
+        private void CreateGenomes()
+        {
             Genes = new Vector2[LifeSpan];
-            for (var i = 0; i < LifeSpan; i++) {
+            for (var i = 0; i < LifeSpan; i++)
+            {
                 Genes[i] = CreateBiasVector();
             }
         }
@@ -43,7 +48,7 @@ namespace BlazorCanvasTest2.Models
         /// <returns></returns>
         public Individual Crossover(Individual parent1, Individual parent2)
         {
-            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, Utils.ToHex(Utils.Blend(Utils.ToColor(parent1.Color), Utils.ToColor(parent2.Color), 0.5)), parent1.Dna.GetLifeSpan(), parent1.Dna.MaxForce);
+            Individual child = new Individual(parent1.Start, new Vector2(0, 0), parent1.R, Utils.ToHex(Utils.ToColor(parent1.Color).Blend(Utils.ToColor(parent2.Color), 0.5)), parent1.Dna.GetLifeSpan(), parent1.Dna.MaxForce);
 
             // Point of Crossover
             int crossoverPoint = Utils.random.Next(parent1.Dna.GetLifeSpan());
@@ -70,7 +75,7 @@ namespace BlazorCanvasTest2.Models
 
             for (int i = 0; i < Genes.Length; i++)
             {
-                if (Utils.GetRandomDouble() < mutationRate) 
+                if (Utils.GetRandomDouble() < mutationRate)
                 {
                     int val = random.Next(0, 3);
                     int pm = random.Next(0, 2);
@@ -97,11 +102,11 @@ namespace BlazorCanvasTest2.Models
 
         private int Bounds(int x)
         {
-            if(x > 255)
+            if (x > 255)
             {
                 return 255;
             }
-            if(x < 0)
+            if (x < 0)
             {
                 return 0;
             }

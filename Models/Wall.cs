@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Blazor.Extensions.Canvas.Canvas2D;
+﻿using Blazor.Extensions.Canvas.Canvas2D;
 
-namespace BlazorCanvasTest2.Models
+namespace blazor_canvas_ga_path_finding.Models
 {
     public class Wall
     {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-namespace BlazorCanvasTest2.Models
+using blazor_canvas_ga_path_finding.Models;
+
+namespace Controllers
 {
     public class Population
     {
@@ -9,15 +11,21 @@ namespace BlazorCanvasTest2.Models
         public double BestFitness { get; set; }
         public Individual BestIndividual { get; set; }
         public int BestIndex { get; set; }
-        public int Generation {  get; set; }   
+        public int Generation { get; set; }
         public Individual BestEver { get; set; }
+        private SelectionMethod SelectionMethod { get; set; }
+
+        public Population(SelectionMethod selectionMethod)
+        {
+            SelectionMethod=selectionMethod;
+        }
 
         public void Initialize(Vector2 start, int populationSize, int lifespan, double maxForce)
         {
             Individuals = new Individual[populationSize];
             for (int i = 0; i < populationSize; i++)
             {
-                Individuals[i] = new Individual(start, new Vector2(0,0), 10, Utils.RandomHexColor(), lifespan, maxForce);
+                Individuals[i] = new Individual(start, new Vector2(0, 0), 10, Utils.RandomHexColor(), lifespan, maxForce);
             }
 
             // just fitness 0
@@ -45,16 +53,15 @@ namespace BlazorCanvasTest2.Models
             }
         }
 
-
         public Individual TournamentSelection(int tournamentSize)
         {
             Individual[] tournament = new Individual[tournamentSize];
             for (int i = 0; i < tournamentSize; i++)
             {
-                if(Utils.GetRandomDouble() < 0.2) 
+                if (Utils.GetRandomDouble() < 0.2)
                 {
                     // tournament[i] = Utils.GetRandomDouble() < 0.1 ? Individuals[BestIndex] : BestEver; // choose alltime best or gereration best
-                    tournament[i] = Individuals[BestIndex]; 
+                    tournament[i] = Individuals[BestIndex];
                 }
                 else
                 {
@@ -91,7 +98,7 @@ namespace BlazorCanvasTest2.Models
             Array.Sort(Individuals, (x, y) => y.Fitness.CompareTo(x.Fitness));
 
             // Calculate selection probabilities based on rank
-            double totalProbability = (Individuals.Length * (Individuals.Length + 1)) / 2.0;
+            double totalProbability = Individuals.Length * (Individuals.Length + 1) / 2.0;
             double[] selectionProbabilities = new double[Individuals.Length];
             for (int i = 0; i < Individuals.Length; i++)
             {
@@ -120,8 +127,8 @@ namespace BlazorCanvasTest2.Models
 
             for (int i = 0; i < Individuals.Length; i++)
             {
-                Individual parent1 = RankSelection();
-                Individual parent2 = RankSelection();
+                Individual parent1 = SelectionMethod == SelectionMethod.Ranked ? RankSelection() : TournamentSelection(5);
+                Individual parent2 = SelectionMethod == SelectionMethod.Ranked ? RankSelection() : TournamentSelection(5);
                 Individual child = parent1.Dna.Crossover(parent1, parent2);
                 child.Color = Utils.ToHex(child.Dna.Mutate(mutationRate, Utils.ToColor(child.Color))); // TODO make it mach the controller
                 newGeneration[i] = child;

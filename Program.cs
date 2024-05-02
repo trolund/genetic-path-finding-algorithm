@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorCanvasTest2
+namespace blazor_canvas_ga_path_finding
 {
     public class Program
     {

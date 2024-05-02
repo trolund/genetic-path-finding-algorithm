@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Blazor.Extensions.Canvas.Canvas2D;
+using Controllers;
 
-namespace BlazorCanvasTest2.Models
+namespace blazor_canvas_ga_path_finding.Models
 {
     public class Individual
     {

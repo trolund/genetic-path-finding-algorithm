@@ -1,10 +1,8 @@
-using System;
-using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
 
-namespace BlazorCanvasTest2.Models
+namespace blazor_canvas_ga_path_finding.Models
 {
     public class LifeBar {
 

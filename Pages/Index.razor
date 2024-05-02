@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Controllers
+@using blazor_canvas_ga_path_finding.Models
 
 @inject IJSRuntime JsRuntime;
 
@@ -44,14 +46,14 @@ Genetic algorithm used for path-finding
     </label>
     <button disabled="@started" style="width: 100px; padding: 5px; margin-left: auto; margin-right: auto;" @onclick="Start">Start</button>
 </div>
-<div id="canvasHolder" style="position: relative; background-color: smokeWhite; width: 800px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
+<div id="canvasHolder" style="position: relative; background-color: whitesmoke; width: 800px; height: 900px; margin-left: auto; margin-right: auto; border: 5px; border-color: rgb(52, 52, 52); border-style: solid;">
     <BECanvas Width="800" Height="900" @ref="_canvasReference"></BECanvas>
 </div>
 
 @code{
-    private Models.Population population = new Models.Population();
+    private static SelectionMethod selectionMethod = SelectionMethod.Tournament; // TODO: change to be set in the UI.
+    private Population population = new Population(selectionMethod);
     private List<Models.Wall> walls = new List<Models.Wall>();
-    
     private Vector2 goal = new Vector2(250, 80);
     private Vector2 start = new Vector2(350, 800);
     private bool headless = false;
@@ -61,6 +63,7 @@ Genetic algorithm used for path-finding
     private int populationSize = 50;
     private int genomSize = 100;
     private double maxForce = 15;
+    
     private Models.LifeBar bar;
     private Canvas2DContext ctx;
     protected BECanvasComponent _canvasReference;
@@ -179,7 +182,6 @@ Genetic algorithm used for path-finding
             await this.ctx.FillTextAsync($"The goal have been reached!!", 10, 20);
         }
 
-        // draw start and goal
         // goal
         await this.ctx.BeginPathAsync();
         await this.ctx.SetFillStyleAsync("#2e2e2e");
@@ -190,7 +192,6 @@ Genetic algorithm used for path-finding
         await this.ctx.SetFillStyleAsync("#2e2e2e");
         await this.ctx.ArcAsync(start.X, start.Y, 20, 0, 2 * Math.PI, false);
         await this.ctx.FillAsync();
-
 
         foreach (var individual in population.Individuals)
         {
