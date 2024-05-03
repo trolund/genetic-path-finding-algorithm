@@ -14,8 +14,8 @@ The top candidate solutions from the population are chosen through Tournament or
 
 ## First generation
 
-![alt text](docs/gif1.gif)
+![alt text](Docs/gif1.gif)
 
 ## After multiple generations
 
-![alt text](docs/gif2.gif)
+![alt text](Docs/gif2.gif)
