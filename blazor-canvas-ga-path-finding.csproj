@@ -11,7 +11,7 @@ https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-
 
   <PropertyGroup>
     <GHPages>true</GHPages>
-    <GHPagesBase>/Genetic-algorithm-path-finding/</GHPagesBase>
+    <GHPagesBase>/genetic-path-finding-algorithm/</GHPagesBase>
   </PropertyGroup>
 
   <ItemGroup>
