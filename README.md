@@ -10,7 +10,7 @@ The mutation rate determines how frequently these movements will undergo changes
 
 The top candidate solutions from the population are chosen through Tournament or Rank selection methods.
 
-[Demo link](https://trolund.github.io/Genetic-algorithm-path-finding/)
+[Demo link](https://trolund.github.io/genetic-path-finding-algorithm)
 
 ## First generation
 
